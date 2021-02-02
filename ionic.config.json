@@ -1,0 +1,7 @@
+{
+  "name": "Scrape",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
