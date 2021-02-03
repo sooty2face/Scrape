@@ -1,4 +1,8 @@
-<ion-app>
+<div *ngIf="isOffline" class="network-status-bar">
+  {{ Offline }}
+</div>
+
+<ion-app [ngClass]="[isOffline ? 'offline' : '']">
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-content>
@@ -6,13 +10,19 @@
           <ion-list-header>Inbox</ion-list-header>
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none"
+              detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
-        </ion-list>
 
+        </ion-list>
+        <ion-menu-toggle>
+          <ion-item (click)="logout()" [routerLink]="'/login'" routerLinkActive="selected">
+            Sign out
+          </ion-item>
+        </ion-menu-toggle>
         <ion-list id="labels-list">
           <ion-list-header>Labels</ion-list-header>
 

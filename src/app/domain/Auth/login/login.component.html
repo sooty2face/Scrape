@@ -1,0 +1,38 @@
+﻿<ion-content class="ion-padding">
+    <form [formGroup]="form">
+        <ion-label class="title" color="dark">Login</ion-label>
+        <div>
+            <ion-item class="ion-no-padding">
+                <ion-label position="stacked">Username</ion-label>
+                <ion-input name="userName" type="text" formControlName="username"></ion-input>
+            </ion-item>
+            <div class="validation-errors">
+                <ng-container *ngFor="let validation of formValidationMessages.username">
+                    <div class="error-message"
+                        *ngIf="form.get('username').hasError(validation.type) && (form.get('username').dirty)">
+                        {{ validation.message }}
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div>
+            <ion-item class="ion-no-padding">
+                <ion-label position="stacked">Password</ion-label>
+                <ion-input [type]="showPassword ? 'text' : 'password'" name="password" formControlName="password"
+                    clearOnEdit="false"></ion-input>
+                <ion-icon slot="end" [name]="toggleEye" (click)="togglePassword()"></ion-icon>
+            </ion-item>
+            <div class="validation-errors">
+                <ng-container *ngFor="let validation of formValidationMessages.password">
+                    <div class="error-message"
+                        *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty)">
+                        {{ validation.message }}
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <ion-button (click)="onSubmit()" [disabled]="!form.valid" expand="block">Login</ion-button>
+        <div *ngIf="error" class="validation-errors">{{error}}</div>
+    </form>
+    <!-- <ion-item *ngIf="isOffline$ | async">Offline</ion-item> -->
+</ion-content>
