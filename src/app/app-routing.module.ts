@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: '',
-    redirectTo: 'folder/Inbox',
+    redirectTo: 'folder/Dashboard',
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },
@@ -17,7 +17,8 @@ const routes: Routes = [
     path: 'folder/:id',
     loadChildren: () => import('./folder/folder.module').then(m => m.FolderPageModule),
     canActivate: [AuthGuard]
-  }
+  },
+  { path: '**', component: LoginComponent }
 ];
 
 @NgModule({

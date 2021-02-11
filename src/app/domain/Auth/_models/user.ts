@@ -5,4 +5,5 @@
     firstName: string;
     lastName: string;
     token?: string;
+    deviceID?: string;
 }

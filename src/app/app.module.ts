@@ -16,9 +16,10 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DatabaseModule } from './shared/rxdb/database.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConnectivityStateService } from './shared/network/services';
+import { ToggleComponent } from './domain/Auth/login/toggle/toggle/toggle.component';
 
 @NgModule({
-  declarations: [AppComponent, routingComponents],
+  declarations: [AppComponent, ToggleComponent, routingComponents],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -27,7 +28,7 @@ import { ConnectivityStateService } from './shared/network/services';
     DatabaseModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule    
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

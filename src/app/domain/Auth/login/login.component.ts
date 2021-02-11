@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first, map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { ConnectivityStateService } from 'src/app/shared/network/services';
     styleUrls: ['login.component.scss']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     form: FormGroup;
     loading = false;
     submitted = false;
@@ -26,8 +26,6 @@ export class LoginComponent implements OnInit {
     hide = true;
 
     public formValidationMessages = { username: [], password: [] };
-    public showPassword: boolean = false;
-    public toggleEye: string = 'eye-off';
 
     private authServiceSubscription: Subscription;
     public isOffline$ = this.connectivityStateService.connectivity$.pipe(map((status) => status.isConnected !== true));
@@ -40,12 +38,12 @@ export class LoginComponent implements OnInit {
         private toDosRepo: ToDosRepository,
         private toDoService: ToDoService,
         private loadingController: LoadingController,
-        private connectivityStateService:ConnectivityStateService
+        private connectivityStateService: ConnectivityStateService
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue && this.authenticationService.isAuthenticated()) {
-            console.log("trying to redirect")
-            this.router.navigate(['/folder/Inbox']);
+            console.log('trying to redirect');
+            this.router.navigate(['/folder/Dashboard']);
         }
     }
 
@@ -56,7 +54,7 @@ export class LoginComponent implements OnInit {
         });
 
         // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
 
         this.formValidationMessages = {
             username: [
@@ -84,7 +82,7 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 data => {
                     this.refreshRxDB();
-                    this.router.navigate(['/folder/Inbox']);
+                    this.router.navigate(['/folder/Dashboard']);
                 },
                 error => {
                     this.error = error;
@@ -97,13 +95,8 @@ export class LoginComponent implements OnInit {
 
     async refreshRxDB() {
         this.toDoService.getToDos().subscribe(async res => {
-            await this.toDosRepo.bulkUpsert(res)
+            await this.toDosRepo.bulkUpsert(res);
         });
-    }
-
-    public togglePassword() {
-        this.showPassword = !this.showPassword;
-        this.toggleEye = this.showPassword ? 'eye' : 'eye-off';
     }
 
     public ngOnDestroy() {

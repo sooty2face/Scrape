@@ -1,10 +1,11 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { User } from '../_models';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { DeviceID } from './deviceid.service';
 // import { DatabaseProvider } from 'src/app/rxdb/DatabaseProvider';
 
 /* 
@@ -35,6 +36,7 @@ export class AuthenticationService {
     public currentUser: Observable<User>;
 
     constructor(private http: HttpClient,
+        private deviceIDService: DeviceID,
         private jwtHelper: JwtHelperService/*,
         private databaseProvider: DatabaseProvider*/) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -46,13 +48,26 @@ export class AuthenticationService {
     }
 
     login(username: string, password: string) {
-        return this.http.post<any>(`${'http://localhost:4000'}/users/authenticate`, { username, password })
-            .pipe(map(user => {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
-            }));
+        return this.deviceIDService.getDeviceId()
+            .pipe(
+                switchMap((res) => {
+                    console.log(res);
+                    return this.http.post<any>(`${'http://localhost:4000'}/users/authenticate`, { username, password })
+                        .pipe(map(user => {
+                            // store user details and jwt token in local storage to keep user logged in between page refreshes
+                            localStorage.setItem('currentUser', JSON.stringify(user));
+                            this.currentUserSubject.next(user);
+                            return user;
+                        }));
+                })
+            )
+        // return this.http.post<any>(`${'http://localhost:4000'}/users/authenticate`, { username, password })
+        //     .pipe(map(user => {
+        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
+        //         localStorage.setItem('currentUser', JSON.stringify(user));
+        //         this.currentUserSubject.next(user);
+        //         return user;
+        //     }));
     }
 
     logout() {

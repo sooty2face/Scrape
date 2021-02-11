@@ -6,6 +6,10 @@ import { map } from 'rxjs/operators';
 import { AuthenticationService } from './domain/Auth/_services';
 import { ConnectivityStateService } from './shared/network/services';
 import { DatabaseProvider } from './shared/rxdb/DatabaseProvider';
+import { Plugins } from '@capacitor/core';
+
+const { Network } = Plugins;
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -16,12 +20,8 @@ export class AppComponent {
   private isOfflineSubscription: Subscription;
 
   public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
+    { title: 'Dashboard', url: '/folder/Dashboard', icon: 'earth' },
     { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
     { title: 'ToDos', url: '/folder/ToDos', icon: 'paper-plane' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
@@ -53,4 +53,5 @@ export class AppComponent {
     this.router.navigate(['/login']);
     await this.databaseProvider.clearDatabase();
   }
+ 
 }
