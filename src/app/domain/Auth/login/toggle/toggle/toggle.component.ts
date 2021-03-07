@@ -11,16 +11,18 @@ export class ToggleComponent {
 
   constructor() { }
 
-  // @Input() public showPassword: boolean; // variable defined with alias;
   @Input() public InputPassword: string;
 
   @Output() public togglePassEvent = new EventEmitter();
+  // @Output() public sendPassword = new EventEmitter();
 
   public togglePassword() {
-    console.log(this.InputPassword);
+    // console.log(this.InputPassword);
 
     this.showPassword = !this.showPassword;
     this.toggleEye = this.showPassword ? 'eye-off' : 'eye';
     this.togglePassEvent.emit(this.showPassword);
   }
-}
+
+
+  }

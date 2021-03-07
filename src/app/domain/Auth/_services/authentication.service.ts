@@ -6,28 +6,30 @@ import { map, switchMap } from 'rxjs/operators';
 import { User } from '../_models';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { DeviceID } from './deviceid.service';
+import { LoadingController, NavController } from '@ionic/angular';
+import { AlertService } from 'src/app/shared/alert';
 // import { DatabaseProvider } from 'src/app/rxdb/DatabaseProvider';
 
-/* 
---- The authentication service is used to login & logout of the Angular app, it notifies other components when the user 
+/*
+--- The authentication service is used to login & logout of the Angular app, it notifies other components when the user
 logs in & out, and allows access the currently logged in user.
---- RxJS Subjects and Observables are used to store the current user object and notify other components when the user logs 
+--- RxJS Subjects and Observables are used to store the current user object and notify other components when the user logs
 in and out of the app. Angular components can subscribe() to the public currentUser: Observable property to be notified
 of changes, and notifications are sent when the this.currentUserSubject.next() method is called in the login() and logout() methods,
-passing the argument to each subscriber. The RxJS BehaviorSubject is a special type of Subject that keeps hold of the current 
-value and emits it to any new subscribers as soon as they subscribe, while regular Subjects don't store the current value and 
-only emit values that are published after a subscription is created. For more info on communicating between components with 
+passing the argument to each subscriber. The RxJS BehaviorSubject is a special type of Subject that keeps hold of the current
+value and emits it to any new subscribers as soon as they subscribe, while regular Subjects don't store the current value and
+only emit values that are published after a subscription is created. For more info on communicating between components with
 RxJS Observables see this post.
---- The login() method sends the user credentials to the API via an HTTP POST request for authentication. If successful the user 
-object including a JWT auth token are stored in localStorage to keep the user logged in between page refreshes. The user object 
+--- The login() method sends the user credentials to the API via an HTTP POST request for authentication. If successful the user
+object including a JWT auth token are stored in localStorage to keep the user logged in between page refreshes. The user object
 is then published to all subscribers with the call to this.currentUserSubject.next(user).
---- The constructor() of the service initialises the currentUserSubject with the currentUser object from localStorage which enables 
-the user to stay logged in between page refreshes or after the browser is closed. The public currentUser property is then set to 
-this.currentUserSubject.asObservable(); which allows other components to subscribe to the currentUser Observable but doesn't allow 
+--- The constructor() of the service initialises the currentUserSubject with the currentUser object from localStorage which enables
+the user to stay logged in between page refreshes or after the browser is closed. The public currentUser property is then set to
+this.currentUserSubject.asObservable(); which allows other components to subscribe to the currentUser Observable but doesn't allow
 them to publish to the currentUserSubject, this is so logging in and out of the app can only be done via the authentication service.
---- The currentUserValue getter allows other components an easy way to get the value of the currently logged in user without 
+--- The currentUserValue getter allows other components an easy way to get the value of the currently logged in user without
 having to subscribe to the currentUser Observable.
---- The logout() method removes the current user object from local storage and publishes null to the currentUserSubject to notify 
+--- The logout() method removes the current user object from local storage and publishes null to the currentUserSubject to notify
 all subscribers that the user has logged out. */
 
 @Injectable({ providedIn: 'root' })
@@ -35,9 +37,14 @@ export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
-    constructor(private http: HttpClient,
+    constructor(
+        private http: HttpClient,
         private deviceIDService: DeviceID,
-        private jwtHelper: JwtHelperService/*,
+        private jwtHelper: JwtHelperService,
+        private navController: NavController,
+        private loadingController: LoadingController,
+        private alertService: AlertService,
+        /*,
         private databaseProvider: DatabaseProvider*/) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
@@ -60,7 +67,7 @@ export class AuthenticationService {
                             return user;
                         }));
                 })
-            )
+            );
         // return this.http.post<any>(`${'http://localhost:4000'}/users/authenticate`, { username, password })
         //     .pipe(map(user => {
         //         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -70,12 +77,37 @@ export class AuthenticationService {
         //     }));
     }
 
+    public async logoutWithConfirmation() {
+        console.log('about to logout');
+        const yesButton = {
+            text: 'Yes',
+            handler: async () => {
+                const loader = await this.loadingController.create();
+                await loader.present();
+                await this.logout();
+                loader.dismiss();
+            },
+        };
+        const stayButton = {
+            text: 'No',
+            handler: () => { },
+        };
+
+        await this.alertService.presentAlert(
+            'Leave',
+            'Are you sure you want to logout?',
+            [yesButton, stayButton],
+            true
+        );
+    }
+
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
+        this.navController.navigateRoot('login');
         // this.databaseProvider.clearDatabase();
-        //location.reload();
+        // location.reload();
     }
 
     public isAuthenticated(): boolean {

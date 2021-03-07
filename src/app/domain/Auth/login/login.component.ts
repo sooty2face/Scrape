@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue && this.authenticationService.isAuthenticated()) {
             console.log('trying to redirect');
-            this.router.navigate(['/folder/Dashboard']);
+            this.router.navigate(['/Dashboard']);
         }
     }
 
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             .subscribe(
                 data => {
                     this.refreshRxDB();
-                    this.router.navigate(['/folder/Dashboard']);
+                    this.router.navigate(['/Dashboard']);
                 },
                 error => {
                     this.error = error;
@@ -100,6 +100,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.authServiceSubscription.unsubscribe();
+        if (this.authServiceSubscription) {
+            this.authServiceSubscription.unsubscribe();
+        }
     }
 }

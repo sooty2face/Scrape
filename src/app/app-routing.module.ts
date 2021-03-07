@@ -6,17 +6,14 @@ import { FolderPage } from './folder/folder.page';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'login', component: LoginComponent },
   {
-    path: '',
-    redirectTo: 'folder/Dashboard',
-    pathMatch: 'full',
-    canActivate: [AuthGuard]
+    path: 'login',
+    loadChildren: () => import('./domain/Auth/login/login-routing.module').then((m) => m.LoginRoutingModule),
   },
   {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then(m => m.FolderPageModule),
-    canActivate: [AuthGuard]
+    path: 'Dashboard',
+    loadChildren: () => import('./pages/dashboard/dashboard/dashboard.-routing.module').then((m) => m.DashboardRoutingModule),
+    canActivate: [AuthGuard],
   },
   { path: '**', component: LoginComponent }
 ];
@@ -31,4 +28,4 @@ export class AppRoutingModule { }
 
 export const routingComponents = [
   LoginComponent
-]
+];

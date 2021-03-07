@@ -1,0 +1,13 @@
+:host {
+    ion-content {
+        div {
+            &.align-items {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                // font-size: 25px;
+                --background: var(--ion-color-primary);
+            }
+        }
+    }
+}

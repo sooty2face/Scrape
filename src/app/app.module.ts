@@ -17,6 +17,11 @@ import { DatabaseModule } from './shared/rxdb/database.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConnectivityStateService } from './shared/network/services';
 import { ToggleComponent } from './domain/Auth/login/toggle/toggle/toggle.component';
+import { DeviceID } from './domain/Auth/_services/deviceid.service';
+import { DomainAuthModule } from './domain/Auth/domain-auth.module';
+import { AlertModule } from './shared/alert';
+import { CommonModule } from '@angular/common';
+import { DashboardPageModule } from './pages/dashboard/dashboard/dashboard.module';
 
 @NgModule({
   declarations: [AppComponent, ToggleComponent, routingComponents],
@@ -28,7 +33,11 @@ import { ToggleComponent } from './domain/Auth/login/toggle/toggle/toggle.compon
     DatabaseModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule    
+    HttpClientModule,
+    DomainAuthModule.forRoot(),
+    AlertModule.forRoot(),
+    CommonModule,
+    DashboardPageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -36,13 +45,7 @@ import { ToggleComponent } from './domain/Auth/login/toggle/toggle/toggle.compon
     ToDoQuery,
     ToDoStore,
     ToDoService,
-    ToDosRepository,
-    AuthGuard,
-    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    // { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },],
+    ToDosRepository, ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
