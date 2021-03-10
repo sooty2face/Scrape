@@ -2,20 +2,22 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './domain/Auth/login';
 import { AuthGuard } from './domain/Auth/_helpers';
-import { FolderPage } from './folder/folder.page';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   {
     path: 'login',
-    loadChildren: () => import('./domain/Auth/login/login-routing.module').then((m) => m.LoginRoutingModule),
+    loadChildren: () => import('./domain/Auth/login/login.module').then((m) => m.LoginPageModule),
   },
   {
     path: 'Dashboard',
-    loadChildren: () => import('./pages/dashboard/dashboard/dashboard.-routing.module').then((m) => m.DashboardRoutingModule),
+    loadChildren: () => import('./pages/dashboard/dashboard/dashboard.module').then((m) => m.DashboardPageModule),
     canActivate: [AuthGuard],
   },
-  { path: '**', component: LoginComponent }
+  {
+    path: '**',
+    loadChildren: () => import('./domain/Auth/login/login.module').then((m) => m.LoginPageModule)
+  }
 ];
 
 @NgModule({

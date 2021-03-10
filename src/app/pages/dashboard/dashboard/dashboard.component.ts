@@ -1,54 +1,43 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from 'src/app/domain/Auth';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   public googleTrendsRes: any;
   public country = 'RO';
-  public region = 'Sibiu';
-  public keyword = 'Laptop';
+  public region = 'covid';
+  public keyword = 'sibiu';
 
   public countrySearchTermsByDay = [];
   public countryTrends$ = new Observable();
   public keywordsTrends$ = new Observable();
 
-  public observer = {
-    next: x => {
-      console.log('Observer got a next value');
-    },
-    error: err => console.error('Observer got an error: ' + err),
-    complete: () => console.log('Observer got a complete notification'),
-  };
+  private envUrl = environment.googleTrendsAPI;
+
   constructor(
-    private http: HttpClient,
     private authenticationService: AuthenticationService) { }
 
   getAll() {
     // return this.http.get(`${'http://localhost:4000'}/googleTrends/googletrends`)
-    this.countryTrends$ = this.http.get(`${'http://localhost:4000'}/${this.country}`);
-    this.keywordsTrends$ = this.http.get(`${'http://localhost:4000'}/${this.region}/${this.keyword}`)
-    // .subscribe({
-    //   next: (result: any) => {
-    //     this.countrySearchTermsByDay = result;
-    //     console.log(result);
-    //   },
-    //   error: (err: any) => {
-    //     console.log(err);
-    //   },
-    //   complete: () => {
-    //     console.log('complete');
-    //   }
-    // });
+    // this.countryTrends$ = this.http.get(`${this.envUrl}/${this.country}`);
+    // this.keywordsTrends$ = this.http.get(`${this.envUrl}/${this.region}/${this.keyword}`);
   }
 
   ngOnInit() {
     this.getAll();
+  }
+
+  ngAfterViewInit() {
+    // setTimeout(() => {
+    //   console.log('afterViewInitDash');
+    // }, 3000);
   }
 
   async logout() {
