@@ -5,7 +5,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule, routingComponents } from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { ToDoQuery } from './domain/todos/state/query';
 import { ToDoStore } from './domain/todos/state/store';
 import { ToDoService } from './domain/todos/services/todos.service';
@@ -17,9 +17,10 @@ import { ConnectivityStateService } from './shared/network/services';
 import { DomainAuthModule } from './domain/Auth/domain-auth.module';
 import { AlertModule } from './shared/alert';
 import { CommonModule } from '@angular/common';
+import { DomainDailyTrendsModule } from './domain/daily-trends/domain-daily-trends.module';
 
 @NgModule({
-  declarations: [AppComponent, routingComponents],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -32,6 +33,7 @@ import { CommonModule } from '@angular/common';
     DomainAuthModule.forRoot(),
     AlertModule.forRoot(),
     CommonModule,
+    DomainDailyTrendsModule.forRoot(),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

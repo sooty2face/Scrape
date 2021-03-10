@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './domain/Auth/login';
+// import { LoginComponent } from './domain/Auth/login';
 import { AuthGuard } from './domain/Auth/_helpers';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
+  // { path: '', component: LoginComponent },
   {
     path: 'login',
     loadChildren: () => import('./domain/Auth/login/login.module').then((m) => m.LoginPageModule),
@@ -28,6 +28,6 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const routingComponents = [
-  LoginComponent
-];
+// export const routingComponents = [
+//   LoginComponent
+// ];

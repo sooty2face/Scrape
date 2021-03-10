@@ -18,13 +18,10 @@
         <div>
             <ion-item class="ion-no-padding">
                 <ion-label position="stacked">Password</ion-label>
-                <ion-input #password [type]="toggleResult ? 'text' : 'password'" name="password"
-                    formControlName="password" clearOnEdit="false"
-                    >
+                <ion-input #password [type]="showPassword ? 'text' : 'password'" name="password"
+                    formControlName="password" clearOnEdit="false">
                 </ion-input>
-                <app-toggle slot="end" class="toggle" (togglePassEvent)="toggleResult=$event"
-                    [InputPassword]=password.value>
-                </app-toggle>
+                <ion-text *ngIf="password.value" (click)="togglePassword()">{{togglePassButtonLabel}}</ion-text>
             </ion-item>
 
             <div class="validation-errors">

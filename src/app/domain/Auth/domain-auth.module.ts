@@ -1,9 +1,6 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { LoginComponent } from './login';
-import { LoginRoutingModule } from './login/login-routing.module';
-import { ToggleComponent } from './login/toggle/toggle/toggle.component';
 import { AuthGuard, ErrorInterceptor, JwtInterceptor } from './_helpers';
 import { AuthenticationService } from './_services';
 import { DeviceID } from './_services/deviceid.service';

@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     hide = true;
 
     public formValidationMessages = { username: [], password: [] };
-
+    public showPassword = false;
+    public togglePassButtonLabel = 'Show';
     private authServiceSubscription: Subscription;
     public isOffline$ = this.connectivityStateService.connectivity$.pipe(map((status) => status.isConnected !== true));
 
@@ -97,6 +98,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.toDoService.getToDos().subscribe(async res => {
             await this.toDosRepo.bulkUpsert(res);
         });
+    }
+
+    public togglePassword() {
+        this.showPassword = !this.showPassword;
+        this.togglePassButtonLabel = this.showPassword ? 'Show' : 'Hide';
     }
 
     public ngOnDestroy() {
