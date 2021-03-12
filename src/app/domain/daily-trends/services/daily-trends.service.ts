@@ -12,8 +12,8 @@ export class DailyTrendsService {
   private trendsResult: any;
   constructor(private httpService: HttpClient) { }
 
-  public getDailyTrends(country: string): Observable<DailyTrendsDto> {
-    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}`);/*.subscribe(res => {
+  public getDailyTrends$(country: string): Observable<DailyTrendsDto> {
+    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}`); /*.subscribe(res => {
       console.log(res);
       this.trendsResult = res;
     });

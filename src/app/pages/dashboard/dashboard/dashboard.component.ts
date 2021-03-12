@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/domain/Auth';
 import { DailyTrendsDto } from 'src/app/domain/daily-trends/models';
@@ -11,7 +12,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   public country = 'RO';
   public region = 'covid';
@@ -23,20 +24,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   public keywordsTrends$ = new Observable();
   public dailyTrendsSubscription: Subscription;
 
-
   constructor(
     private authenticationService: AuthenticationService,
-    private googleTrendsAPI: DailyTrendsService) { }
+    private googleTrendsAPI: DailyTrendsService,
+    private navController: NavController) { }
 
   public getAll() {
     // return this.http.get(`${'http://localhost:4000'}/googleTrends/googletrends`)
     // this.countryTrends$ = this.googleTrendsAPI.getDailyTrends(`${this.envUrl}/${this.country}`);
     // this.keywordsTrends$ = this.http.get(`${this.envUrl}/${this.region}/${this.keyword}`);
-    this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends(`${this.country}`)
+    this.countryTrends$ = this.googleTrendsAPI.getDailyTrends$(`${this.country}`);
+    this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends$(`${this.country}`)
       .subscribe(res => {
-        // console.log(res);
         this.DailyTrends = res;
-        console.log(this.DailyTrends[1].title.query);
       });
   }
 
@@ -45,10 +45,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     // console.log('res2: ' + this.DailyTrends);
   }
 
-  ngAfterViewInit() {
-    // setTimeout(() => {
-    //   console.log('afterViewInitDash');
-    // }, 3000);
+  public renderExtraInfo(id: number){
+    console.log('id: ' + id);
+    this.navController.navigateRoot(['/daily-trends-details', id]);
   }
 
   async logout() {

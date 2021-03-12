@@ -1,0 +1,22 @@
+<ion-list>
+    <!-- Sliding item with text options on both sides -->
+    <ion-item-sliding *ngFor="let article of articles; let i=index;">
+        <ion-item>
+            <ion-label>
+                {{article.snippet}}
+            </ion-label>
+            <img [src]="imageArray[i]">
+        </ion-item>
+    </ion-item-sliding>
+</ion-list>
+
+<!-- <div>
+    {{newsUrl}}
+</div> -->
+<div>
+    {{source}}
+</div>
+<!-- <div>
+    Test
+    <img [src]="base64Image">
+</div> -->

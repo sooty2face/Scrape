@@ -18,6 +18,8 @@ import { DomainAuthModule } from './domain/Auth/domain-auth.module';
 import { AlertModule } from './shared/alert';
 import { CommonModule } from '@angular/common';
 import { DomainDailyTrendsModule } from './domain/daily-trends/domain-daily-trends.module';
+import { PagesModule } from './pages/pages.module';
+import { ImageService } from './shared/services/image.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,6 +36,7 @@ import { DomainDailyTrendsModule } from './domain/daily-trends/domain-daily-tren
     AlertModule.forRoot(),
     CommonModule,
     DomainDailyTrendsModule.forRoot(),
+    PagesModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -41,7 +44,9 @@ import { DomainDailyTrendsModule } from './domain/daily-trends/domain-daily-tren
     ToDoQuery,
     ToDoStore,
     ToDoService,
-    ToDosRepository, ],
+    ToDosRepository,
+    ImageService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -14,8 +14,44 @@
       <ion-title size="large">Dashboard</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-list>
+    <!-- Sliding item with text options on both sides -->
+    <ion-item-sliding *ngFor="let dailyTrend of DailyTrends; let i=index;">
+      <ion-item-options side="start">
+        <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>
+        <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option>
+      </ion-item-options>
+
+      <ion-item>
+        <ion-label>
+          {{dailyTrend.title.query}}
+        </ion-label>
+        <ion-text>{{dailyTrend.formattedTraffic}}</ion-text>
+      </ion-item>
+
+
+      <ion-item-options>
+        <ion-item-option color="primary" (click)="renderExtraInfo(i)">
+          <ion-icon slot="end" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+          More
+        </ion-item-option>
+        <ion-item-option color="secondary">
+          <ion-icon slot="end" name="archive"></ion-icon>
+          Archive
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
   <div class="align-items">
-    <ion-card>
+    <ion-card *ngFor="let dailyTrend of DailyTrends; i as index;">
+      
+    </ion-card>
+    <!-- <ion-card>
+      {{(countryTrends$ | async)?.title}}
+    </ion-card> -->
+    <!-- <ion-card>
       <div>
         {{DailyTrends}}
         {{countryTrends$ | async}}
@@ -25,7 +61,7 @@
       <div>
         {{keywordsTrends$ | async}}
       </div>
-    </ion-card>
+    </ion-card> -->
   </div>
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button>
