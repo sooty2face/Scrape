@@ -8,6 +8,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { DeviceID } from './deviceid.service';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/shared/alert';
+import { environment } from 'src/environments/environment';
 // import { DatabaseProvider } from 'src/app/rxdb/DatabaseProvider';
 
 /*
@@ -36,7 +37,8 @@ all subscribers that the user has logged out. */
 export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
-
+    private envUrl = environment.googleTrendsAPI;
+    
     constructor(
         private http: HttpClient,
         private deviceIDService: DeviceID,
@@ -59,7 +61,7 @@ export class AuthenticationService {
             .pipe(
                 switchMap((res) => {
                     console.log(res);
-                    return this.http.post<any>(`${'http://localhost:4000'}/users/authenticate`, { username, password })
+                    return this.http.post<any>(`${this.envUrl}/users/authenticate`, { username, password })
                         .pipe(map(user => {
                             // store user details and jwt token in local storage to keep user logged in between page refreshes
                             localStorage.setItem('currentUser', JSON.stringify(user));
@@ -68,13 +70,6 @@ export class AuthenticationService {
                         }));
                 })
             );
-        // return this.http.post<any>(`${'http://localhost:4000'}/users/authenticate`, { username, password })
-        //     .pipe(map(user => {
-        //         // store user details and jwt token in local storage to keep user logged in between page refreshes
-        //         localStorage.setItem('currentUser', JSON.stringify(user));
-        //         this.currentUserSubject.next(user);
-        //         return user;
-        //     }));
     }
 
     public async logoutWithConfirmation() {

@@ -4,11 +4,14 @@ import { Observable } from 'rxjs';
 
 import { AuthenticationService } from '../_services';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 export let AppInjector: Injector;
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
+    private envUrl = environment.googleTrendsAPI;
+    
     constructor(private router: Router,
         private authenticationService: AuthenticationService,
         private route: ActivatedRoute,
@@ -35,7 +38,7 @@ export class JwtInterceptor implements HttpInterceptor {
         // console.log("jwt intercept token");
         let isLoggedIn = currentUser && currentUser.token;
 
-        const isApiUrl = request.url.startsWith('http://localhost:4000');
+        const isApiUrl = request.url.startsWith(`${this.envUrl}`);
         if (isLoggedIn /*&& isApiUrl*/) {
             // console.log("Intercepting adding auth: " + isLoggedIn);
             request = request.clone({
