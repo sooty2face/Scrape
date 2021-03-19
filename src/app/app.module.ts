@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { DomainDailyTrendsModule } from './domain/daily-trends/domain-daily-trends.module';
 import { PagesModule } from './pages/pages.module';
 import { ImageService } from './shared/services/image.service';
+import { SharedHttpModule } from './shared/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,7 +37,8 @@ import { ImageService } from './shared/services/image.service';
     AlertModule.forRoot(),
     CommonModule,
     DomainDailyTrendsModule.forRoot(),
-    PagesModule
+    PagesModule,
+    SharedHttpModule.forRoot(),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

@@ -1,8 +1,8 @@
 import { RxJsonSchema } from 'rxdb';
 
-const toDoSchema: RxJsonSchema = {
+const dailyTrendsSchema: RxJsonSchema = {
     version: 0,
-    title: 'todo schema no compression',
+    title: 'daily-trends schema no compression',
     keyCompression: true,
     type: 'object',
     properties: {
@@ -34,4 +34,4 @@ const toDoSchema: RxJsonSchema = {
     ]
 };
 
-export default toDoSchema;
+export default dailyTrendsSchema;

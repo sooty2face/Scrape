@@ -1,3 +1,13 @@
+<!-- <ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button [text]="buttonText" [icon]="buttonIcon">
+            </ion-back-button>
+        </ion-buttons>
+        <ion-title>Articles</ion-title>
+    </ion-toolbar>
+</ion-header> -->
+
 <ion-list>
     <!-- Sliding item with text options on both sides -->
     <ion-item-sliding *ngFor="let article of articles; let i=index;">
@@ -5,6 +15,8 @@
             <ion-label>
                 {{article.snippet}}
             </ion-label>
+            <a href={{newsUrlArray[i]}} target="_blank">Click me</a>
+            <!-- <ion-label>{{newsUrlArray[i]}}</ion-label> -->
             <img [src]="imageArray[i]">
         </ion-item>
     </ion-item-sliding>

@@ -9,14 +9,16 @@ export class DailyTrendsService {
 
   private envUrl = environment.googleTrendsAPI;
 
-  private trendsResult: any;
+  private keyword1 = 'React';
+  private keyword2 = 'Angular';
+
   constructor(private httpService: HttpClient) { }
 
-  public getDailyTrends$(country: string): Observable<DailyTrendsDto> {
-    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}`); /*.subscribe(res => {
-      console.log(res);
-      this.trendsResult = res;
-    });
-    return this.trendsResult;*/
+  public getDailyTrends(country: string, day: number): Observable<DailyTrendsDto> {
+    // this.httpService.get(`${this.envUrl}/${this.keyword1}/${this.keyword2}`).subscribe(res => {
+    //   console.log('keywords results: ' + res);
+
+    // });
+    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${day}`);
   }
 }

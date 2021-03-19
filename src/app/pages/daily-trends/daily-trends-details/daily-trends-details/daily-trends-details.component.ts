@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -10,9 +10,10 @@ import { DailyTrendsService, ImageService } from 'src/app/domain/daily-trends/se
   templateUrl: './daily-trends-details.component.html',
   styleUrls: ['./daily-trends-details.component.scss'],
 })
-export class DailyTrendsDetailsComponent implements OnInit {
+export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   private dailyTrendsSubscription: Subscription;
   private country = 'RO';
+  private day: number;
   public dailyTrends: DailyTrendsItemDto;
   public dailyTrendsByID = [];
   public id: any;
@@ -22,6 +23,7 @@ export class DailyTrendsDetailsComponent implements OnInit {
   public base64Image: any;
   public articles: ArticleDto[];
   public imageArray: Array<string> = [];
+  public newsUrlArray: Array<string> = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -29,16 +31,15 @@ export class DailyTrendsDetailsComponent implements OnInit {
     private imageService: ImageService) { }
 
   ngOnInit() {
+    // tslint:disable-next-line: radix
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+    // tslint:disable-next-line: radix
+    this.day = parseInt(this.route.snapshot.paramMap.get('day'));
     this.getAll();
-
-
-
-    // this.imageService.addImage('test').subscribe(res =>
-    //   console.log('Req result --------- ' + res));
   }
 
   getBase64ImageFromURL(url: string) {
+    // tslint:disable-next-line: deprecation
     return Observable.create((observer: Observer<string>) => {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
@@ -71,7 +72,8 @@ export class DailyTrendsDetailsComponent implements OnInit {
   }
 
   public getAll() {
-    this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends$(`${this.country}`)
+    this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day)
+      // tslint:disable-next-line: deprecation
       .subscribe(res => {
         this.dailyTrends = res[this.id];
         // console.log('id: ' + this.id);
@@ -93,8 +95,17 @@ export class DailyTrendsDetailsComponent implements OnInit {
               this.imageArray.push(this.base64Image);
 
             });
+
+          this.newsUrlArray.push(element.url);
         });
+
       });
+  }
+
+  ngOnDestroy() {
+    if (this.dailyTrendsSubscription) {
+      this.dailyTrendsSubscription.unsubscribe();
+    }
   }
 
 }

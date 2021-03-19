@@ -15,7 +15,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'daily-trends-details/:id',
+    path: 'daily-trends-details',
     loadChildren: () => import('./pages/daily-trends/daily-trends.routing.module').then((m) => m.DailyTrendsRoutingModule),
     canActivate: [AuthGuard],
   },

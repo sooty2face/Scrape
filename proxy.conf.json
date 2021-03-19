@@ -1,0 +1,10 @@
+{
+    "/RO": {
+        "target": "https://nodejs-gtrends-api.herokuapp.com",
+        "secure": true,
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/RO": ""
+        }
+    }
+}
