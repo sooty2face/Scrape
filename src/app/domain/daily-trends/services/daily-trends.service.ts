@@ -21,4 +21,20 @@ export class DailyTrendsService {
     // });
     return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${day}`);
   }
+
+  public getDailyTrends1(country: string, day: number): Promise<any> {
+    console.log('testttt');
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = `${this.envUrl}/${country}/${day}`;
+      this.httpService.get(apiURL)
+        .toPromise();
+      // .then(
+      //   res => { // Success
+      //     console.log('any res???: ' + JSON.stringify(res[0].title.query));
+      //     resolve('success');
+      //   }
+      // );
+    });
+    return promise;
+  }
 }

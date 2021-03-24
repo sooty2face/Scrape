@@ -1,13 +1,18 @@
-<!-- <ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button [text]="buttonText" [icon]="buttonIcon">
-            </ion-back-button>
-        </ion-buttons>
-        <ion-title>Articles</ion-title>
-    </ion-toolbar>
-</ion-header> -->
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+        <ion-back-button defaultHref="Dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Search trend details</ion-title>
+  </ion-toolbar>
+</ion-header>
 
+<ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">Dashboard</ion-title>
+      </ion-toolbar>
+    </ion-header>
 <ion-list>
     <!-- Sliding item with text options on both sides -->
     <ion-item-sliding *ngFor="let article of articles; let i=index;">
@@ -32,3 +37,4 @@
     Test
     <img [src]="base64Image">
 </div> -->
+</ion-content>

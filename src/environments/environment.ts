@@ -5,8 +5,9 @@
 export const environment = {
   production: false,
   baseUrl: 'https://localhost:44348/api/',
-  // googleTrendsAPI: 'http://localhost:4000',
-  googleTrendsAPI: 'https://nodejs-gtrends-api.herokuapp.com'
+  googleTrendsAPI: 'http://localhost:4000',
+  // googleTrendsAPI: 'https://nodejs-gtrends-api.herokuapp.com',
+  googleTrendsAPIRay: ' https://trends.google.com/trends/api/dailytrends?hl=en-US&tz=0&geo=RO&cat=all&ed=20210323&ns=15'
 };
 
 /*

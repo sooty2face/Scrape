@@ -10,5 +10,12 @@
                 --background: var(--ion-color-primary);
             }
         }
+
+        div {
+            &.myButton {
+                background-color: #466c8a;
+                --background: var(--ion-color-primary);
+            }
+        }
     }
 }

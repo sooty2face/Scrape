@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Dashboard</ion-title>
+    <ion-title>#Today</ion-title>
     <!-- <app-todos></app-todos> -->
   </ion-toolbar>
 </ion-header>
@@ -32,7 +32,41 @@
 
 
       <ion-item-options>
-        <ion-item-option color="primary" (click)="renderExtraInfo(i)">
+        <ion-item-option color="primary" (click)="renderExtraInfo(i, 0)">
+          <ion-icon slot="end" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+          More
+        </ion-item-option>
+        <ion-item-option color="secondary">
+          <ion-icon slot="end" name="archive"></ion-icon>
+          Archive
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <div>
+    <button class="myButton" *ngIf="!yesterdayLoaded" (click)="loadYesterdayInfo()">Load yesterday</button>
+  </div>
+  <ion-list *ngIf="yesterdayLoaded">
+    <!-- Sliding item with text options on both sides -->
+    <ion-toolbar>
+      <ion-title size="large">#Yesterday</ion-title>
+    </ion-toolbar>
+    <ion-item-sliding *ngFor="let dailyTrend of DailyTrendsY; let i=index;">
+      <ion-item-options side="start">
+        <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>
+        <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option>
+      </ion-item-options>
+
+      <ion-item>
+        <ion-label>
+          {{dailyTrend.title.query}}
+        </ion-label>
+        <ion-text>{{dailyTrend.formattedTraffic}}</ion-text>
+      </ion-item>
+
+
+      <ion-item-options>
+        <ion-item-option color="primary" (click)="renderExtraInfo(i, 1)">
           <ion-icon slot="end" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
           More
         </ion-item-option>

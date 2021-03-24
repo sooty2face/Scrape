@@ -4,28 +4,9 @@ const dailyTrendsSchema: RxJsonSchema = {
     version: 0,
     title: 'daily-trends schema no compression',
     keyCompression: true,
-    type: 'object',
+    type: 'array',
     properties: {
-        toDoID: {
-            type: 'number'
-        },
-        employeeID: {
-            type: 'number'
-        },
-        title: {
-            type: 'string',
-            primary: true
-        },
-        description: {
-            type: 'string'
-        },
-        status: {
-            type: 'string',
-            enum: ['open', 'completed']
-        },
-        seq: {
-            type: 'number'
-        }
+        items: 
     },
     required: ['employeeID', 'title', 'description', 'status'],
     indexes: [

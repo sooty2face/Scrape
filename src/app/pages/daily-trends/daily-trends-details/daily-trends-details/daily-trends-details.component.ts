@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ArticleDto, DailyTrendsDto, DailyTrendsItemDto } from 'src/app/domain/daily-trends/models';
@@ -28,7 +29,8 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private googleTrendsAPI: DailyTrendsService,
-    private imageService: ImageService) { }
+    private imageService: ImageService,
+    private loadingController: LoadingController) { }
 
   ngOnInit() {
     // tslint:disable-next-line: radix
@@ -71,11 +73,14 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
 
-  public getAll() {
+  public async getAll() {
+    const loader = await this.loadingController.create();
+    await loader.present();
     this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day)
       // tslint:disable-next-line: deprecation
       .subscribe(res => {
         this.dailyTrends = res[this.id];
+        loader.dismiss();
         // console.log('id: ' + this.id);
         this.imageUrl = this.dailyTrends.image.imageUrl;
         this.newsUrl = this.dailyTrends.image.newsUrl;
@@ -99,7 +104,13 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
           this.newsUrlArray.push(element.url);
         });
 
-      });
+      },
+        error => {
+          loader.dismiss();
+        },
+        async () => {
+          loader.dismiss();
+        });
   }
 
   ngOnDestroy() {
