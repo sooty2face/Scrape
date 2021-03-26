@@ -11,7 +11,7 @@ export class DailyTrendsService {
 
   private keyword1 = 'React';
   private keyword2 = 'Angular';
-
+  private dayString: string;
   constructor(private httpService: HttpClient) { }
 
   public getDailyTrends(country: string, day: number): Observable<DailyTrendsDto> {
@@ -19,7 +19,15 @@ export class DailyTrendsService {
     //   console.log('keywords results: ' + res);
 
     // });
-    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${day}`);
+    const today1 = new Date();
+
+    this.dayString =
+      today1.getFullYear() + '-' +
+      String(today1.getMonth() + 1).padStart(2, '0') + '-' +
+      String(today1.getDate() - (day === 0 ? 0 : 1)).padStart(2, '0');
+
+    console.log('day is: ' + this.dayString);
+    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${this.dayString}`);
   }
 
   public getDailyTrends1(country: string, day: number): Promise<any> {
