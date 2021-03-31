@@ -15,6 +15,59 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-menu side="start" menuId="first" contentId="main">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Start Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item>Menu Item 1</ion-item>
+        <ion-item>Menu Item 2</ion-item>
+        <ion-item>Menu Item 3</ion-item>
+        <ion-item>Menu Item 4</ion-item>
+        <ion-item>Menu Item 5</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  
+  <!-- <ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
+    <ion-header>
+      <ion-toolbar color="tertiary">
+        <ion-title>Custom Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  
+  <ion-menu side="end" type="push" contentId="main">
+    <ion-header>
+      <ion-toolbar color="danger">
+        <ion-title>End Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+        <ion-item>Menu Item</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu> -->
+  
+  <ion-router-outlet id="main"></ion-router-outlet>
+
   <ion-list>
     <!-- Sliding item with text options on both sides -->
     <ion-item-sliding *ngFor="let dailyTrend of DailyTrends; let i=index;">
@@ -44,7 +97,7 @@
     </ion-item-sliding>
   </ion-list>
   <div>
-    <button class="myButton" *ngIf="!yesterdayLoaded" (click)="loadYesterdayInfo()">Load yesterday</button>
+    <ion-button class="myButton" *ngIf="!yesterdayLoaded" (click)="loadYesterdayInfo()">Load yesterday</ion-button>
   </div>
   <ion-list *ngIf="yesterdayLoaded">
     <!-- Sliding item with text options on both sides -->

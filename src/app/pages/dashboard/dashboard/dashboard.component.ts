@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, MenuController, NavController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/domain/Auth';
 import { DailyTrendsDto } from 'src/app/domain/daily-trends/models';
@@ -38,7 +38,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private googleTrendsAPI: DailyTrendsService,
     private httpService: HttpService,
     private navController: NavController,
-    private loadingController: LoadingController) { }
+    private loadingController: LoadingController,
+    private menu: MenuController) { }
 
   public async getAll() {
     const loader = await this.loadingController.create();
@@ -99,6 +100,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   async logout() {
     this.authenticationService.logoutWithConfirmation();
+  }
+
+  openFirst() {
+    console.log('open First')
+    this.menu.enable(true, 'first');
+    this.menu.open('first');
+  }
+
+  openEnd() {
+    console.log('open End');
+    this.menu.open('end');
+  }
+
+  openCustom() {
+    console.log('open Custom')
+    this.menu.enable(true, 'custom');
+    this.menu.open('custom');
   }
 
   ngOnDestroy() {
