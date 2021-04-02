@@ -44,9 +44,9 @@ export class DailyTrendsService {
     // console.log('day is: ' + this.dayString1);
     if (this.dayString2 && day === 1) {
       console.log('day is1: ' + this.dayString2);
-      return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${this.dayString2}`);
+      return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${country}/${this.dayString2}`);
     }
     console.log('day is2: ' + this.dayString1);
-    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${this.dayString1}`);
+    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${country}/${this.dayString1}`);
   }
 }

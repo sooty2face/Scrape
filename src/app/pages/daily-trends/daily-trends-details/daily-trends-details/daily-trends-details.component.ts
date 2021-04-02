@@ -116,6 +116,7 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.dailyTrendsSubscription) {
       this.dailyTrendsSubscription.unsubscribe();
+      console.log('killed extra info subscription');
     }
   }
 

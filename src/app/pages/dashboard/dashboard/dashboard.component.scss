@@ -1,13 +1,12 @@
 :host {
     ion-content {
         div {
-            &.align-items {
-                display: flex;
-                background-color: #466c8a;
-                flex-direction: column;
-                justify-content: space-evenly;
-                // font-size: 25px;
-                --background: var(--ion-color-primary);
+            &.figma {
+                position: absolute;
+                width: 375px;
+                height: 812px;
+
+                background: conic-gradient(from 180deg at 50% 50%, #000000 0deg, rgba(198, 227, 228, 0) 360deg);
             }
         }
 
@@ -15,6 +14,16 @@
             &.myButton {
                 background-color: #466c8a;
                 --background: var(--ion-color-primary);
+            }
+        }
+
+        ion-list {
+            ion-toolbar {
+                position: -webkit-sticky; /* Safari */
+                position: sticky;
+                top: 0;
+                
+                border: 1px solid var(--ion-color-primary);
             }
         }
     }

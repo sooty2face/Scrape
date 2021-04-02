@@ -99,9 +99,9 @@
   <div>
     <ion-button class="myButton" *ngIf="!yesterdayLoaded" (click)="loadYesterdayInfo()">Load yesterday</ion-button>
   </div>
-  <ion-list *ngIf="yesterdayLoaded">
+  <ion-list  *ngIf="yesterdayLoaded">
     <!-- Sliding item with text options on both sides -->
-    <ion-toolbar>
+    <ion-toolbar class="sticky">
       <ion-title size="large">#Yesterday</ion-title>
     </ion-toolbar>
     <ion-item-sliding *ngFor="let dailyTrend of DailyTrendsY; let i=index;">
@@ -131,22 +131,9 @@
     </ion-item-sliding>
   </ion-list>
 
-  <div class="align-items">
-    <!-- <ion-card>
-      The result {{(countryTrends$ | async)[0]?.title.query}}
-    </ion-card> -->
-    <!-- <ion-card>
-      <div>
-        {{DailyTrends}}
-        {{countryTrends$ | async}}
-      </div>
-    </ion-card>
-    <ion-card>
-      <div>
-        {{keywordsTrends$ | async}}
-      </div>
-    </ion-card> -->
-  </div>
+  <!-- <div class="figma">
+ 
+  </div> -->
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button>
       <ion-icon name="share"></ion-icon>
