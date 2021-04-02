@@ -12,12 +12,18 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@domain/auth": ["./src/app/domain/Auth/index.ts"],
+      "@domain/database": ["./src/app/domain/RxDB/index.ts"],
+      "@domain/daily-trends": ["./src/app/domain/daily-trends/index.ts"]
+  }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "fullTemplateTypeCheck": true
   }
 }
