@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openFirst() {
-    console.log('open First')
+    console.log('open First');
     this.menu.enable(true, 'first');
     this.menu.open('first');
   }

@@ -11,7 +11,9 @@ export class DailyTrendsService {
 
   private keyword1 = 'React';
   private keyword2 = 'Angular';
-  private dayString: string;
+  private dayString1: string;
+  private dayString2: string;
+
   constructor(private httpService: HttpClient) { }
 
   public getDailyTrends(country: string, day: number): Observable<DailyTrendsDto> {
@@ -20,29 +22,31 @@ export class DailyTrendsService {
 
     // });
     const today1 = new Date();
+    const today2 = new Date();
 
-    this.dayString =
+    // console.log('today1.getMonth() + 1: ' + today1.setDate(0));
+
+    console.log('today1.getDay(): ' + String(today1.getDate() - 0).padStart(2, '0'));
+    if (String(today1.getDate() - 0).padStart(2, '0') === '01') {
+      today2.setDate(0);
+
+      this.dayString2 =
+        today2.getFullYear() + '-' +
+        String(today2.getMonth() + 1).padStart(2, '0') + '-' +
+        String(today2.getDate() - (day === 0 ? 0 : 0)).padStart(2, '0');
+    }
+
+    this.dayString1 =
       today1.getFullYear() + '-' +
       String(today1.getMonth() + 1).padStart(2, '0') + '-' +
       String(today1.getDate() - (day === 0 ? 0 : 1)).padStart(2, '0');
 
-    console.log('day is: ' + this.dayString);
-    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${this.dayString}`);
-  }
-
-  public getDailyTrends1(country: string, day: number): Promise<any> {
-    console.log('testttt');
-    let promise = new Promise((resolve, reject) => {
-      let apiURL = `${this.envUrl}/${country}/${day}`;
-      this.httpService.get(apiURL)
-        .toPromise();
-      // .then(
-      //   res => { // Success
-      //     console.log('any res???: ' + JSON.stringify(res[0].title.query));
-      //     resolve('success');
-      //   }
-      // );
-    });
-    return promise;
+    // console.log('day is: ' + this.dayString1);
+    if (this.dayString2 && day === 1) {
+      console.log('day is1: ' + this.dayString2);
+      return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${this.dayString2}`);
+    }
+    console.log('day is2: ' + this.dayString1);
+    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/${country}/${this.dayString1}`);
   }
 }
