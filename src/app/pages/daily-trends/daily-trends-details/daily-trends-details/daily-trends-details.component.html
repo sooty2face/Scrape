@@ -1,40 +1,27 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-        <ion-back-button defaultHref="Dashboard"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Search trend details</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="Dashboard"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Search trend details</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title size="large">Dashboard</ion-title>
-      </ion-toolbar>
-    </ion-header>
-<ion-list>
-    <!-- Sliding item with text options on both sides -->
-    <ion-item-sliding *ngFor="let article of articles; let i=index;">
-        <ion-item>
+    <ion-list>
+        <ion-item *ngFor="let article of articles; let i=index;">
             <ion-label>
                 {{article.snippet}}
             </ion-label>
-            <a href={{newsUrlArray[i]}} target="_blank">Click me</a>
-            <!-- <ion-label>{{newsUrlArray[i]}}</ion-label> -->
-            <img [src]="imageArray[i]">
+            <a href={{newsUrlArray[i]}} target="_blank">
+                <!-- <ion-label>{{newsUrlArray[i]}}</ion-label> -->
+                <img [src]="imageArray[i]">
+            </a>
         </ion-item>
-    </ion-item-sliding>
-</ion-list>
+    </ion-list>
 
-<!-- <div>
-    {{newsUrl}}
-</div> -->
-<div>
-    {{source}}
-</div>
-<!-- <div>
-    Test
-    <img [src]="base64Image">
-</div> -->
+    <div>
+        {{source}}
+    </div>
+
 </ion-content>

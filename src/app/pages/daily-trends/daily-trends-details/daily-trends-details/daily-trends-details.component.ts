@@ -69,7 +69,7 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
     const dataURL = canvas.toDataURL('image/png');
-    // console.log('dataUrl ---------- ' + dataURL);
+
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
 
@@ -81,24 +81,16 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.dailyTrends = res[this.id];
         loader.dismiss();
-        // console.log('id: ' + this.id);
         this.imageUrl = this.dailyTrends.image.imageUrl;
         this.newsUrl = this.dailyTrends.image.newsUrl;
         this.source = this.dailyTrends.image.source;
         this.articles = this.dailyTrends.articles;
-        // console.log('dailyTrend:' + this.imageUrl);
-        // console.log('newsUrl:' + this.newsUrl);
-        // console.log('articles:' + this.articles[1].snippet);
+
         this.articles.forEach(element => {
-          // console.log(element.snippet);
           this.getBase64ImageFromURL(element.image.imageUrl ? element.image.imageUrl : 'https://t1.gstatic.com/images?q=tbn:ANd9GcTlZXJBZDHlvWTO9Nj0CHKay4RspAml-VR7h7ohmr6d7CWwH-_1t4SIIkCM3TRGXpfDIQyenklK')
             .subscribe(base64data => {
-              // console.log('base64data ----- ' + base64data);
               this.base64Image = 'data:image/jpg;base64,' + base64data;
-
-              // console.log('base64Image ----- ' + base64data);
               this.imageArray.push(this.base64Image);
-
             });
 
           this.newsUrlArray.push(element.url);
