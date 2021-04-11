@@ -1,3 +1,11 @@
+<!--font-size: rem
+width: % in combination with a max-width, ch
+height: question urself "do i rly need to set height" if yes -> use a min-height
+padding/margin: rem or em, kevin often uses em for padding of buttons
+media queries: em
+
+px only for little things like shadows, borders etc.-->
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -5,6 +13,15 @@
     </ion-buttons>
     <ion-title>#Today</ion-title>
     <!-- <app-todos></app-todos> -->
+    <!-- <app-refresher>Refresher</app-refresher> -->
+    <!-- Custom Refresher Content -->
+    <ion-content>
+      <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+          refreshingSpinner="circles" refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+    </ion-content>
   </ion-toolbar>
 </ion-header>
 
@@ -13,6 +30,14 @@
     <ion-toolbar>
       <ion-title size="large">Dashboard</ion-title>
     </ion-toolbar>
+
+    <!-- Default Refresher -->
+    <ion-content>
+      <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
+    </ion-content>
+
   </ion-header>
 
   <ion-menu side="start" menuId="first" contentId="main">
@@ -31,7 +56,7 @@
       </ion-list>
     </ion-content>
   </ion-menu>
-  
+
   <!-- <ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
     <ion-header>
       <ion-toolbar color="tertiary">
@@ -65,7 +90,7 @@
       </ion-list>
     </ion-content>
   </ion-menu> -->
-  
+
   <ion-router-outlet id="main"></ion-router-outlet>
 
   <ion-list>
@@ -99,12 +124,12 @@
   <div>
     <ion-button class="myButton" *ngIf="!yesterdayLoaded" (click)="loadYesterdayInfo()">Load yesterday</ion-button>
   </div>
-  <ion-list  *ngIf="yesterdayLoaded">
+  <ion-list *ngIf="yesterdayLoaded">
     <!-- Sliding item with text options on both sides -->
     <ion-toolbar class="sticky">
       <ion-title size="large">#Yesterday</ion-title>
     </ion-toolbar>
-    <ion-item-sliding *ngFor="let dailyTrend of DailyTrendsY; let i=index;">
+    <ion-item-sliding *ngFor="let dailyTrend of DailyTrendsYStore; let i=index;">
       <ion-item-options side="start">
         <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>
         <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option>

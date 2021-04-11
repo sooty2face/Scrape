@@ -1,4 +1,7 @@
 :host {
+    ion-refresher {
+        position: relative;
+    }
     ion-content {
         div {
             &.figma {
@@ -22,7 +25,7 @@
                 position: -webkit-sticky; /* Safari */
                 position: sticky;
                 top: 0;
-                
+
                 border: 1px solid var(--ion-color-primary);
             }
         }

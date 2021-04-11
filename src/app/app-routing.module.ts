@@ -19,6 +19,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/daily-trends/daily-trends.routing.module').then((m) => m.DailyTrendsRoutingModule),
     canActivate: [AuthGuard],
   },
+  // {
+  //   path: '',
+  //   loadChildren: () => import('./shared/components/shared-components.module').then((m) => m.SharedComponentsModule),
+  //   canActivate: [AuthGuard],
+  // },
   {
     path: '**',
     loadChildren: () => import('./domain/Auth/login/login.module').then((m) => m.LoginPageModule)

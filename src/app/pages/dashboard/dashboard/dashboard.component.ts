@@ -1,12 +1,11 @@
-import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoadingController, MenuController, NavController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
+import { filter, switchMap, take } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/domain/Auth';
 import { DailyTrendsDto } from 'src/app/domain/daily-trends/models';
 import { DailyTrendsService } from 'src/app/domain/daily-trends/services';
-import { HttpService } from 'src/app/shared/http';
-import { environment } from 'src/environments/environment';
+import { DailyTrendsQry, DailyTrendsStore } from '../state';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +21,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public DailyTrends: DailyTrendsDto;
   public DailyTrendsY: DailyTrendsDto;
 
+  public DailyTrendsStore: DailyTrendsDto[];
+  public DailyTrendsYStore: DailyTrendsDto[];
+  public storeUpdate: boolean;
+
   public loadYesterday = false;
   public yesterdayLoaded = false;
 
@@ -30,16 +33,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public keywordsTrends$ = new Observable();
   public dailyTrendsSubscription: Subscription;
   public dailyTrendsSubscriptionY: Subscription;
-  private envUrl = environment.googleTrendsAPI;
+  public dailyTrendsSubscriptionYStore: Subscription;
 
 
   constructor(
     private authenticationService: AuthenticationService,
     private googleTrendsAPI: DailyTrendsService,
-    private httpService: HttpService,
     private navController: NavController,
     private loadingController: LoadingController,
-    private menu: MenuController) { }
+    private menu: MenuController,
+    private dailyTrendsQuery: DailyTrendsQry,
+    private dailyTrendsStore: DailyTrendsStore) { }
 
   public async getAll() {
     const loader = await this.loadingController.create();
@@ -72,6 +76,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getAll();
+    console.log('query loaded? ' + this.dailyTrendsQuery.getDailyTrendsMoreLoaded());
+    this.dailyTrendsQuery.getDailyTrendsMoreLoaded().subscribe(res => {
+      if (res) {
+        this.updateDailyTrendsStore();
+      }
+    });
   }
 
   public renderExtraInfo(id: number, day: number) {
@@ -83,12 +93,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loadYesterday = true;
     const loader = await this.loadingController.create();
     await loader.present();
+
+    this.updateDailyTrendsStore();
+
     this.dailyTrendsSubscriptionY = this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day + 1)
       // tslint:disable-next-line: deprecation
       .subscribe(
         res => {
           this.DailyTrendsY = res;
           this.yesterdayLoaded = true;
+
+          if (this.dailyTrendsSubscription) {
+            this.dailyTrendsSubscription.unsubscribe();
+            console.log('killed today subscription');
+          }
+
           loader.dismiss();
         },
         error => {
@@ -98,6 +117,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
           loader.dismiss();
         });
   }
+
+  private updateDailyTrendsStore() {
+    // tslint:disable-next-line: deprecation
+    this.dailyTrendsQuery.getLoading().subscribe(res => this.storeUpdate = res);
+    this.dailyTrendsSubscriptionYStore = this.dailyTrendsQuery.getDailyTrendsToday()
+      // tslint:disable-next-line: deprecation
+      .subscribe(res => {
+        this.yesterdayLoaded = true;
+        this.DailyTrendsYStore = [...res];
+      });
+
+    this.dailyTrendsQuery.getLoaded().pipe(
+      take(1),
+      filter(res => !res),
+      switchMap(() => {
+        this.dailyTrendsStore.setLoading(true);
+        return this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day + 1);
+      })
+      // tslint:disable-next-line: deprecation
+    ).subscribe(res => {
+
+      this.dailyTrendsStore.update(dailyTrendsState => {
+        return {
+          dailyTrendsToday: res,
+          dailyTrendsMore: res,
+          loadMoreButtonPressed: true
+        };
+      });
+      // console.log('store res' + JSON.stringify(this.DailyTrendsYStore));
+      this.dailyTrendsStore.setLoading(false);
+    });
+  }
+
   async logout() {
     this.authenticationService.logoutWithConfirmation();
   }
@@ -128,6 +180,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.dailyTrendsSubscriptionY) {
       this.dailyTrendsSubscriptionY.unsubscribe();
       console.log('killed yesterday subscription');
+    }
+
+    if (this.dailyTrendsSubscriptionYStore) {
+      this.dailyTrendsSubscriptionYStore.unsubscribe();
+      console.log('killed yesterday store subscription');
     }
   }
 }

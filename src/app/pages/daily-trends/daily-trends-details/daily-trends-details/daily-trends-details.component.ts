@@ -87,7 +87,7 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
         this.articles = this.dailyTrends.articles;
 
         this.articles.forEach(element => {
-          this.getBase64ImageFromURL(element.image.imageUrl ? element.image.imageUrl : 'https://t1.gstatic.com/images?q=tbn:ANd9GcTlZXJBZDHlvWTO9Nj0CHKay4RspAml-VR7h7ohmr6d7CWwH-_1t4SIIkCM3TRGXpfDIQyenklK')
+          this.getBase64ImageFromURL(element.image.imageUrl ? element.image.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png')
             .subscribe(base64data => {
               this.base64Image = 'data:image/jpg;base64,' + base64data;
               this.imageArray.push(this.base64Image);
