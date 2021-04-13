@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Query } from '@datorama/akita';
-import { DailyTrendsDto } from '@domain/daily-trends';
+import { DailyTrendsDto, DailyTrendsItemDto } from '@domain/daily-trends';
 import { Observable } from 'rxjs/internal/Observable';
 
 
@@ -16,12 +16,12 @@ export class DailyTrendsQry extends Query<DailyTrendsState>{
         super(dailyTrendsStore);
     }
 
-    getDailyTrendsToday(): Observable<DailyTrendsDto[]> {
-        return this.select(state => state.dailyTrendsToday);
+    getDailyTrendsToday(): Observable<DailyTrendsDto> {
+        return this.select(state => state.DailyTrendsStore);
     }
 
-    getDailyTrendsMore(): Observable<DailyTrendsDto[]> {
-        return this.select(state => state.dailyTrendsMore);
+    getDailyTrendsMore(): Observable<DailyTrendsDto> {
+        return this.select(state => state.DailyTrendsYStore);
     }
 
     getDailyTrendsMoreLoaded(): Observable<boolean> {

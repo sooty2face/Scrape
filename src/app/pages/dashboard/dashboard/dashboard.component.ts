@@ -3,7 +3,7 @@ import { LoadingController, MenuController, NavController } from '@ionic/angular
 import { Observable, Subscription } from 'rxjs';
 import { filter, switchMap, take } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/domain/Auth';
-import { DailyTrendsDto } from 'src/app/domain/daily-trends/models';
+import { DailyTrendsDto, DailyTrendsItemDto } from 'src/app/domain/daily-trends/models';
 import { DailyTrendsService } from 'src/app/domain/daily-trends/services';
 import { DailyTrendsQry, DailyTrendsStore } from '../state';
 
@@ -21,8 +21,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public DailyTrends: DailyTrendsDto;
   public DailyTrendsY: DailyTrendsDto;
 
-  public DailyTrendsStore: DailyTrendsDto[];
-  public DailyTrendsYStore: DailyTrendsDto[];
+  public DailyTrendsStore: DailyTrendsDto;
+  public DailyTrendsYStore: DailyTrendsDto;
   public storeUpdate: boolean;
 
   public loadYesterday = false;
@@ -76,7 +76,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getAll();
-    console.log('query loaded? ' + this.dailyTrendsQuery.getDailyTrendsMoreLoaded());
+    // console.log('query loaded? ' + this.dailyTrendsQuery.getDailyTrendsMoreLoaded());
+    // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getDailyTrendsMoreLoaded().subscribe(res => {
       if (res) {
         this.updateDailyTrendsStore();
@@ -121,11 +122,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private updateDailyTrendsStore() {
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getLoading().subscribe(res => this.storeUpdate = res);
-    this.dailyTrendsSubscriptionYStore = this.dailyTrendsQuery.getDailyTrendsToday()
+    this.dailyTrendsSubscriptionYStore = this.dailyTrendsQuery.getDailyTrendsMore()
       // tslint:disable-next-line: deprecation
       .subscribe(res => {
         this.yesterdayLoaded = true;
-        this.DailyTrendsYStore = [...res];
+        this.DailyTrendsYStore = res;
       });
 
     this.dailyTrendsQuery.getLoaded().pipe(
@@ -137,12 +138,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
       // tslint:disable-next-line: deprecation
     ).subscribe(res => {
-
+      // console.log('res : ' + JSON.stringify(res));
       this.dailyTrendsStore.update(dailyTrendsState => {
         return {
-          dailyTrendsToday: res,
-          dailyTrendsMore: res,
-          loadMoreButtonPressed: true
+          DailyTrendsStore: res,
+          DailyTrendsYStore: res,
+          loadMoreButtonPressed: true,
+          isLoaded: true
         };
       });
       // console.log('store res' + JSON.stringify(this.DailyTrendsYStore));
@@ -152,6 +154,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async logout() {
     this.authenticationService.logoutWithConfirmation();
+    await this.dailyTrendsStore.update(logoutState => {
+      return {
+        DailyTrendsStore: null,
+        DailyTrendsYStore: null,
+        loadMoreButtonPressed: false,
+        isLoaded: false
+      };
+    });
   }
 
   openFirst() {

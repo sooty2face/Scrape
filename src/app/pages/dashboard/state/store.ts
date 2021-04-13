@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Store, StoreConfig } from '@datorama/akita';
-import { DailyTrendsDto } from '@domain/daily-trends';
+import { DailyTrendsDto, DailyTrendsItemDto } from '@domain/daily-trends';
 
 
 
 export interface DailyTrendsState {
-    dailyTrendsToday: DailyTrendsDto[];
-    dailyTrendsMore: DailyTrendsDto[];
+    DailyTrendsStore: DailyTrendsDto;
+    DailyTrendsYStore: DailyTrendsDto;
     loadMoreButtonPressed: boolean;
     isLoaded: boolean;
 }
@@ -14,8 +14,8 @@ export interface DailyTrendsState {
 /* Set the initial state */
 export const getInitialState = () => {
     return {
-        dailyTrendsToday: [],
-        dailyTrendsMore: [],
+        DailyTrendsStore: null,
+        DailyTrendsYStore: null,
         loadMoreButtonPressed: false,
         isLoaded: false
     };
