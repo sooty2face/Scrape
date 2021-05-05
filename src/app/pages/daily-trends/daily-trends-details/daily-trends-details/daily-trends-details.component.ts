@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { ImageService } from '@shared/utils';
 import { Observable, Observer, Subscription } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { ArticleDto, DailyTrendsDto, DailyTrendsItemDto } from 'src/app/domain/daily-trends/models';
 import { DailyTrendsService } from 'src/app/domain/daily-trends/services';
+
 
 @Component({
   selector: 'app-daily-trends-details',
@@ -26,10 +27,13 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   public imageArray: Array<string> = [];
   public newsUrlArray: Array<string> = [];
 
+  private ImageSubscription: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private googleTrendsAPI: DailyTrendsService,
-    private loadingController: LoadingController) { }
+    private loadingController: LoadingController,
+    private imageService: ImageService) { }
 
   ngOnInit() {
     // tslint:disable-next-line: radix
@@ -37,39 +41,6 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line: radix
     this.day = parseInt(this.route.snapshot.paramMap.get('day'));
     this.getAll();
-  }
-
-  getBase64ImageFromURL$(url: string) {
-    // tslint:disable-next-line: deprecation
-    return new Observable((observer: Observer<string>) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.src = url;
-      // console.log('image src ----- ' + img.src);
-      if (!img.complete) {
-        img.onload = () => {
-          observer.next(this.getBase64Image(img));
-          observer.complete();
-        };
-        img.onerror = (err) => {
-          observer.error(err);
-        };
-      } else {
-        observer.next(this.getBase64Image(img));
-        observer.complete();
-      }
-    });
-  }
-
-  getBase64Image(img: HTMLImageElement) {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    const dataURL = canvas.toDataURL('image/png');
-
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
 
   public async getAll() {
@@ -86,7 +57,7 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
         this.articles = this.dailyTrends.articles;
 
         this.articles.forEach(element => {
-          this.getBase64ImageFromURL$(element.image.imageUrl ? element.image.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png')
+          this.ImageSubscription = this.imageService.getBase64ImageFromURL$(element.image.imageUrl ? element.image.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png')
             .subscribe(base64data => {
               this.base64Image = 'data:image/jpg;base64,' + base64data;
               this.imageArray.push(this.base64Image);
@@ -107,8 +78,10 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.dailyTrendsSubscription) {
       this.dailyTrendsSubscription.unsubscribe();
-      console.log('killed extra info subscription');
+    }
+
+    if (this.ImageSubscription) {
+      this.ImageSubscription.unsubscribe();
     }
   }
-
 }

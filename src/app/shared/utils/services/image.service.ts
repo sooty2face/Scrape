@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 
+@Injectable()
 export class ImageService {
-    getBase64ImageFromURL$(url: string) {
+    getBase64ImageFromURL$(url: string): Observable<string> {
         // tslint:disable-next-line: deprecation
         return new Observable((observer: Observer<string>) => {
             const img = new Image();
@@ -23,7 +25,7 @@ export class ImageService {
         });
     }
 
-    getBase64Image(img: HTMLImageElement) {
+    private getBase64Image(img: HTMLImageElement): string {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;

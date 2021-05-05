@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { DomainDailyTrendsModule } from './domain/daily-trends/domain-daily-trends.module';
 import { PagesModule } from './pages/pages.module';
 import { SharedHttpModule } from './shared/http';
+import { SharedUtilsModule } from './shared/utils/shared-utils.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,6 +39,7 @@ import { SharedHttpModule } from './shared/http';
     DomainDailyTrendsModule.forRoot(),
     PagesModule,
     SharedHttpModule.forRoot(),
+    SharedUtilsModule.forRoot(),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

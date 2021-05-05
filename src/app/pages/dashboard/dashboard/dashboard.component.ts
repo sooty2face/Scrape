@@ -106,7 +106,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
           if (this.dailyTrendsSubscription) {
             this.dailyTrendsSubscription.unsubscribe();
-            console.log('killed today subscription');
           }
 
           loader.dismiss();
@@ -184,17 +183,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.dailyTrendsSubscription) {
       this.dailyTrendsSubscription.unsubscribe();
-      console.log('killed today subscription');
     }
 
     if (this.dailyTrendsSubscriptionY) {
       this.dailyTrendsSubscriptionY.unsubscribe();
-      console.log('killed yesterday subscription');
     }
 
     if (this.dailyTrendsSubscriptionYStore) {
       this.dailyTrendsSubscriptionYStore.unsubscribe();
-      console.log('killed yesterday store subscription');
     }
   }
 }
