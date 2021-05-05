@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DailyTrendsService, ImageService } from './services';
+import { DailyTrendsService } from './services';
 
 
 
@@ -15,8 +15,7 @@ export class DomainDailyTrendsModule {
     return {
       ngModule: DomainDailyTrendsModule,
       providers: [
-        DailyTrendsService,
-        ImageService
+        DailyTrendsService
       ],
     };
   }

@@ -4,7 +4,7 @@ import { LoadingController } from '@ionic/angular';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { ArticleDto, DailyTrendsDto, DailyTrendsItemDto } from 'src/app/domain/daily-trends/models';
-import { DailyTrendsService, ImageService } from 'src/app/domain/daily-trends/services';
+import { DailyTrendsService } from 'src/app/domain/daily-trends/services';
 
 @Component({
   selector: 'app-daily-trends-details',
@@ -29,7 +29,6 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private googleTrendsAPI: DailyTrendsService,
-    private imageService: ImageService,
     private loadingController: LoadingController) { }
 
   ngOnInit() {
@@ -40,9 +39,9 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
     this.getAll();
   }
 
-  getBase64ImageFromURL(url: string) {
+  getBase64ImageFromURL$(url: string) {
     // tslint:disable-next-line: deprecation
-    return Observable.create((observer: Observer<string>) => {
+    return new Observable((observer: Observer<string>) => {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
       img.src = url;
@@ -87,7 +86,7 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
         this.articles = this.dailyTrends.articles;
 
         this.articles.forEach(element => {
-          this.getBase64ImageFromURL(element.image.imageUrl ? element.image.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png')
+          this.getBase64ImageFromURL$(element.image.imageUrl ? element.image.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png')
             .subscribe(base64data => {
               this.base64Image = 'data:image/jpg;base64,' + base64data;
               this.imageArray.push(this.base64Image);

@@ -19,7 +19,6 @@ import { AlertModule } from './shared/alert';
 import { CommonModule } from '@angular/common';
 import { DomainDailyTrendsModule } from './domain/daily-trends/domain-daily-trends.module';
 import { PagesModule } from './pages/pages.module';
-import { ImageService } from './shared/services/image.service';
 import { SharedHttpModule } from './shared/http';
 
 @NgModule({
@@ -47,7 +46,6 @@ import { SharedHttpModule } from './shared/http';
     ToDoStore,
     ToDoService,
     ToDosRepository,
-    ImageService,
   ],
   bootstrap: [AppComponent],
 })

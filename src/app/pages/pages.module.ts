@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DailyTrendsPageModule } from './daily-trends/daily-trends.module';
+import { ImageService } from '../shared/utils';
 
 
 
@@ -10,6 +11,6 @@ import { DailyTrendsPageModule } from './daily-trends/daily-trends.module';
     CommonModule,
     DailyTrendsPageModule,
   ],
-  providers: []
+  providers: [ImageService]
 })
 export class PagesModule { }
