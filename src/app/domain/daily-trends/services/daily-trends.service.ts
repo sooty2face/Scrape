@@ -19,7 +19,7 @@ export class DailyTrendsService {
     const today1 = new Date();
     const today2 = new Date();
 
-    console.log('today1.getDay(): ' + String(today1.getDate() - 0).padStart(2, '0'));
+    // console.log('today1.getDay(): ' + String(today1.getDate() - 0).padStart(2, '0'));
     if (String(today1.getDate() - 0).padStart(2, '0') === '01') {
       today2.setDate(0);
 
@@ -35,10 +35,10 @@ export class DailyTrendsService {
       String(today1.getDate() - (day === 0 ? 0 : 1)).padStart(2, '0');
 
     if (this.dayString2 && day === 1) {
-      console.log('day is1: ' + this.dayString2);
+      console.log('(1) day is: ' + this.dayString2);
       return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${country}/${this.dayString2}`);
     }
-    console.log('day is2: ' + this.dayString1);
+    console.log('(2)day is: ' + this.dayString1);
     return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${country}/${this.dayString1}`);
   }
 }

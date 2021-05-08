@@ -14,7 +14,7 @@ import { DailyTrendsService } from 'src/app/domain/daily-trends/services';
 })
 export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   private dailyTrendsSubscription: Subscription;
-  private country = 'RO';
+  private country: string;
   private day: number;
   public dailyTrends: DailyTrendsItemDto;
   public dailyTrendsByID = [];
@@ -40,6 +40,9 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     // tslint:disable-next-line: radix
     this.day = parseInt(this.route.snapshot.paramMap.get('day'));
+
+    this.country = this.route.snapshot.paramMap.get('country');
+
     this.getAll();
   }
 

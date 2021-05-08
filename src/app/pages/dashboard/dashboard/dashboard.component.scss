@@ -1,7 +1,12 @@
 :host {
-    ion-refresher {
-        position: relative;
+    ion-header {
+        ion-toolbar {
+            .menu {
+                display: flex;
+            }
+        }
     }
+
     ion-content {
         div {
             &.figma {

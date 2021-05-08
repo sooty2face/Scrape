@@ -8,10 +8,21 @@ px only for little things like shadows, borders etc.-->
 
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>#Today</ion-title>
+    <div class="menu">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+
+      <ion-title>#Today</ion-title>
+
+      <ion-item>
+        <ion-select [value]="displayCountry" okText="Switch" cancelText="Cancel" (ionChange)="triggerMe($event)">
+          <ion-select-option *ngFor="let country of countries" [value]="country">
+            {{country.value}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
     <!-- <app-todos></app-todos> -->
     <!-- <app-refresher>Refresher</app-refresher> -->
     <!-- Custom Refresher Content -->
@@ -26,26 +37,21 @@ px only for little things like shadows, borders etc.-->
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Dashboard</ion-title>
     </ion-toolbar>
 
-    <!-- Default Refresher -->
+    
     <ion-content>
       <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
     </ion-content>
 
-  </ion-header>
+  </ion-header> -->
 
   <ion-menu side="start" menuId="first" contentId="main">
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Start Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content>
       <ion-list>
         <ion-item>Menu Item 1</ion-item>
@@ -56,7 +62,7 @@ px only for little things like shadows, borders etc.-->
       </ion-list>
     </ion-content>
   </ion-menu>
- 
+
   <ion-router-outlet id="main"></ion-router-outlet>
 
   <ion-list>

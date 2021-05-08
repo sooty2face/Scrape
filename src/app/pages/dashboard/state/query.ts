@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Query } from '@datorama/akita';
-import { DailyTrendsDto, DailyTrendsItemDto } from '@domain/daily-trends';
+import { Country, DailyTrendsDto, DailyTrendsItemDto } from '@domain/daily-trends';
 import { Observable } from 'rxjs/internal/Observable';
 
 
@@ -30,6 +30,10 @@ export class DailyTrendsQry extends Query<DailyTrendsState>{
 
     getLoaded(): Observable<boolean> {
         return this.select(state => state.isLoaded);
+    }
+
+    getCountry$(): Observable<Country> {
+        return this.select(state => state.country);
     }
 
     /* For the isLoading we did not declare any variable in the interface DailyTrendsState in store.ts, but Akita 
