@@ -51,18 +51,19 @@ export class JwtInterceptor implements HttpInterceptor {
         }
 
         /* The next.handle stuff means that we are passing control to the next interceptor in the chain, if there is any */
-        return next.handle(request).pipe(
-            catchError(async (e: any) => {
-                // if (
-                //     e.errorCode === ApiErrorCodes.INVALID_REFRESH_TOKEN ||
-                //     e.errorCode === ApiErrorCodes.EXPIRED_REFRESH_TOKEN ||
-                //     e.errorCode === ApiErrorCodes.INVALID_TOKEN
-                // ) {
-                await this.authenticationService.logout();
-                // }
-                console.log(JSON.stringify(e));
-                throw e;
-            })
-        );
+        return next.handle(request);
+            // .pipe(
+            //     catchError(async (e: any) => {
+            //         // if (
+            //         //     e.errorCode === ApiErrorCodes.INVALID_REFRESH_TOKEN ||
+            //         //     e.errorCode === ApiErrorCodes.EXPIRED_REFRESH_TOKEN ||
+            //         //     e.errorCode === ApiErrorCodes.INVALID_TOKEN
+            //         // ) {
+            //         await this.authenticationService.logout();
+            //         // }
+            //         console.log(JSON.stringify(e));
+            //         throw e;
+            //     })
+            // );
     }
 }
