@@ -48,6 +48,7 @@ import { SharedUtilsModule } from './shared/utils/shared-utils.module';
     ToDoStore,
     ToDoService,
     ToDosRepository,
+    DatabaseModule
   ],
   bootstrap: [AppComponent],
 })

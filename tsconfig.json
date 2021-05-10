@@ -17,7 +17,8 @@
       "@domain/auth": ["./src/app/domain/Auth/index.ts"],
       "@domain/database": ["./src/app/domain/RxDB/index.ts"],
       "@domain/daily-trends": ["./src/app/domain/daily-trends/index.ts"],
-      "@shared/utils": ["./src/app/shared/utils/index.ts"]
+      "@shared/utils": ["./src/app/shared/utils/index.ts"],
+      "@shared/alert": ["./src/app/shared/alert/index.ts"],
   }
   },
   "angularCompilerOptions": {

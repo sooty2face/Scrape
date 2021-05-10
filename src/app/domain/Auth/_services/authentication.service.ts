@@ -9,6 +9,7 @@ import { DeviceID } from './deviceid.service';
 import { LoadingController, NavController } from '@ionic/angular';
 import { AlertService } from 'src/app/shared/alert';
 import { environment } from 'src/environments/environment';
+import { DatabaseProvider } from 'src/app/shared/rxdb/DatabaseProvider';
 // import { DatabaseProvider } from 'src/app/rxdb/DatabaseProvider';
 
 /*
@@ -38,7 +39,7 @@ export class AuthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
     private envUrl = environment.googleTrendsAPI;
-    
+
     constructor(
         private http: HttpClient,
         private deviceIDService: DeviceID,
@@ -46,8 +47,7 @@ export class AuthenticationService {
         private navController: NavController,
         private loadingController: LoadingController,
         private alertService: AlertService,
-        /*,
-        private databaseProvider: DatabaseProvider*/) {
+        private databaseProvider: DatabaseProvider) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
     }
@@ -96,12 +96,13 @@ export class AuthenticationService {
         );
     }
 
-    logout() {
+    async logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+        await this.databaseProvider.clearDatabase();
         this.currentUserSubject.next(null);
-        this.navController.navigateRoot('login');
-        // this.databaseProvider.clearDatabase();
+        await this.navController.navigateRoot('login');
+
         // location.reload();
     }
 

@@ -32,12 +32,13 @@ export class AppComponent {
     private authenticationService: AuthenticationService,
     private databaseProvider: DatabaseProvider
   ) {
-    this.subscribeToNetworkStatus()
+    this.subscribeToNetworkStatus();
   }
 
   private subscribeToNetworkStatus() {
     this.isOfflineSubscription = this.connectivityStateService.connectivity$
       .pipe(map((status) => status.isConnected !== true))
+      // tslint:disable-next-line: deprecation
       .subscribe((isOffline) => {
         this.isOffline = isOffline;
         if (isOffline) {
@@ -53,5 +54,4 @@ export class AppComponent {
     this.router.navigate(['/login']);
     await this.databaseProvider.clearDatabase();
   }
- 
 }
