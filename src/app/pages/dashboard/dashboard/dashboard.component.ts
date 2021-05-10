@@ -39,7 +39,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public storeUpdate: boolean;
 
-  public loadYesterday = false;
   public yesterdayLoaded = false;
 
   public countryIndex = {};
@@ -47,10 +46,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public countryTrends$ = new Observable<DailyTrendsDto>();
   public keywordsTrends$ = new Observable();
 
-  public dailyTrendsSubscription: Subscription;
-  public dailyTrendsSubscriptionY: Subscription;
-  public dailyTrendsSubscriptionYStore: Subscription;
-
+  private dailyTrendsSubscription: Subscription;
+  private dailyTrendsSubscriptionY: Subscription;
+  private dailyTrendsSubscriptionYStore: Subscription;
+  private dailyTrendsQueryCountry: Subscription;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -64,7 +63,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.dailyTrendsQuery.getCountry$().subscribe(res => {
+    // tslint:disable-next-line: deprecation
+    this.dailyTrendsQueryCountry = this.dailyTrendsQuery.getCountry$().subscribe(res => {
       console.log('INITIAL COUNTRY: ' + JSON.stringify(res));
       this.country = res.code;
     });
@@ -73,6 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.countryCode$ = this.dailyTrendsQuery.getCountry$().pipe(map(res => res.code));
     this.countryValue$ = this.dailyTrendsQuery.getCountry$().pipe(map(res => res.value));
 
+    // tslint:disable-next-line: deprecation
     this.countryCode$.subscribe(res => {
       console.log('RES 1: ' + res);
       this.displayCountry = this.countries.find(({ code }) => code === res);
@@ -93,7 +94,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // console.log('Country index: ' + JSON.stringify(this.countryIndex));
     this.country = this.countryIndex['value'].code.valueOf();
     // console.log('after Country index: ' + this.countryIndex['value'].value.valueOf());
-    let countryValue = this.countryIndex['value'].value.valueOf();
+    const countryValue = this.countryIndex['value'].value.valueOf();
     // console.log('COUNTRY swapped: ' + this.country);
 
     const countrySwapped: Country = { code: this.country, value: countryValue };
@@ -127,32 +128,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public async loadYesterdayInfo() {
-    this.loadYesterday = true;
-    const loader = await this.loadingController.create();
-    await loader.present();
+    // const loader = await this.loadingController.create();
+    // await loader.present();
 
-    this.updateDailyTrendsStore();
+    await this.updateDailyTrendsStore();
 
-    this.dailyTrendsQuery.getDailyTrendsMore().subscribe(
-      res => {
-        // this.DailyTrendsY = res;
-        // this.yesterdayLoaded = true;
+    // tslint:disable-next-line: deprecation
+    // this.dailyTrendsQuery.getDailyTrendsMore().subscribe(
+    //   res => {
+    //     // this.DailyTrendsY = res;
+    //     // this.yesterdayLoaded = true;
 
-        if (this.dailyTrendsSubscription) {
-          this.dailyTrendsSubscription.unsubscribe();
-        }
+    //     if (this.dailyTrendsSubscription) {
+    //       this.dailyTrendsSubscription.unsubscribe();
+    //     }
 
-        loader.dismiss();
-      },
-      error => {
-        loader.dismiss();
-      },
-      async () => {
-        loader.dismiss();
-      });
+    //     loader.dismiss();
+    //   },
+    //   error => {
+    //     loader.dismiss();
+    //   },
+    //   async () => {
+    //     loader.dismiss();
+    //   });
   }
 
-  private updateDailyTrendsStore() {
+  private async updateDailyTrendsStore() {
+    const loader = await this.loadingController.create();
+
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getLoading().subscribe(res => this.storeUpdate = res);
     this.dailyTrendsSubscriptionYStore = this.dailyTrendsQuery.getDailyTrendsMore()
@@ -167,11 +170,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       filter(res => !res),
       switchMap(() => {
         this.dailyTrendsStore.setLoading(true);
-
+        loader.present();
         return this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day + 1);
       })
       // tslint:disable-next-line: deprecation
     ).subscribe(res => {
+      loader.dismiss();
       this.dailyTrendsStore.update(dailyTrendsState => {
         return {
           DailyTrendsStore: res,
@@ -225,6 +229,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     if (this.dailyTrendsSubscriptionYStore) {
       this.dailyTrendsSubscriptionYStore.unsubscribe();
+    }
+
+    if (this.dailyTrendsQueryCountry) {
+      this.dailyTrendsQueryCountry.unsubscribe();
     }
   }
 }
