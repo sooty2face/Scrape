@@ -155,7 +155,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private async updateDailyTrendsStore() {
     const loader = await this.loadingController.create();
-
+    // await loader.present();
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getLoading().subscribe(res => this.storeUpdate = res);
     this.dailyTrendsSubscriptionYStore = this.dailyTrendsQuery.getDailyTrendsMore()
@@ -174,19 +174,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day + 1);
       })
       // tslint:disable-next-line: deprecation
-    ).subscribe(res => {
-      loader.dismiss();
-      this.dailyTrendsStore.update(dailyTrendsState => {
-        return {
-          DailyTrendsStore: res,
-          DailyTrendsYStore: res,
-          loadMoreButtonPressed: true,
-          isLoaded: true
-        };
-      });
+    ).subscribe(
+      async res => {
+        await loader.dismiss();
+        this.dailyTrendsStore.update(dailyTrendsState => {
+          return {
+            DailyTrendsStore: res,
+            DailyTrendsYStore: res,
+            loadMoreButtonPressed: true,
+            isLoaded: true
+          };
+        });
 
-      this.dailyTrendsStore.setLoading(false);
-    });
+        this.dailyTrendsStore.setLoading(false);
+      },
+      async () => {
+        await loader.dismiss();
+      },
+      async () => {
+        await loader.dismiss();
+      });
   }
 
   async logout() {

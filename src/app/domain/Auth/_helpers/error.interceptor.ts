@@ -21,7 +21,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                     // auto logout if 401 response returned from api
                     this.showSessionExpiredAlert();
                     this.authenticationService.logout();
-                    // location.reload();
+                    location.reload();
                 }
                 console.log('error intercept: ' + JSON.stringify(err));
                 const error = err.error.message || err.code;
