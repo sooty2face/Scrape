@@ -13,7 +13,9 @@ px only for little things like shadows, borders etc.-->
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
 
-      <ion-title>#Today</ion-title>
+      <ion-title>Dashboard</ion-title>
+
+
 
       <ion-item>
         <ion-select [value]="displayCountry" okText="Switch" cancelText="Cancel" (ionChange)="triggerMe($event)">
@@ -22,6 +24,12 @@ px only for little things like shadows, borders etc.-->
           </ion-select-option>
         </ion-select>
       </ion-item>
+
+      <ion-label>Theme</ion-label>
+      <ion-item>
+        <ion-toggle checked="{{initialDarkTheme}}" (ionChange)="toggleTheme($event)"></ion-toggle>
+      </ion-item>
+
     </div>
     <!-- <app-todos></app-todos> -->
     <!-- <app-refresher>Refresher</app-refresher> -->
@@ -67,6 +75,9 @@ px only for little things like shadows, borders etc.-->
 
   <ion-list>
     <!-- Sliding item with text options on both sides -->
+    <ion-toolbar class="sticky">
+      <ion-title size="large">#Today</ion-title>
+    </ion-toolbar>
     <ion-item-sliding *ngFor="let dailyTrend of DailyTrends; let i=index;">
       <ion-item-options side="start">
         <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>

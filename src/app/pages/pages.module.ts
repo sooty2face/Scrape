@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DailyTrendsPageModule } from './daily-trends/daily-trends.module';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -9,6 +10,7 @@ import { DailyTrendsPageModule } from './daily-trends/daily-trends.module';
   imports: [
     CommonModule,
     DailyTrendsPageModule,
+    FormsModule
   ],
   providers: []
 })

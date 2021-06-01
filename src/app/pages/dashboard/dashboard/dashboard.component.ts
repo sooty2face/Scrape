@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, MenuController, NavController } from '@ionic/angular';
 import { merge, Observable, Subscription } from 'rxjs';
@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public country: string;
   public displayCountry: Country = { code: '', value: '' };
 
+  public initialDarkTheme = true;
 
   public countryCode$: Observable<string>;
   public countryValue$: Observable<string>;
@@ -58,11 +59,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     private menu: MenuController,
     private dailyTrendsQuery: DailyTrendsQry,
-    private dailyTrendsStore: DailyTrendsStore) {
+    private dailyTrendsStore: DailyTrendsStore,
+    private renderer: Renderer2) {
     // this.dailyTrendsStore.partialRestoreInitialState();
   }
 
   ngOnInit() {
+    this.renderer.setAttribute(document.body, 'color-theme', 'dark');
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQueryCountry = this.dailyTrendsQuery.getCountry$().subscribe(res => {
       console.log('INITIAL COUNTRY: ' + JSON.stringify(res));
@@ -223,6 +226,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log('open Custom')
     this.menu.enable(true, 'custom');
     this.menu.open('custom');
+  }
+
+  public toggleTheme(event: any) {
+    if (event.detail.checked) {
+      // document.body.setAttribute('color-theme', 'dark');
+      this.renderer.setAttribute(document.body, 'color-theme', 'dark');
+    }
+    else {
+      // document.body.setAttribute('color-theme', 'light');
+      this.renderer.setAttribute(document.body, 'color-theme', 'light');
+    }
   }
 
   ngOnDestroy() {
