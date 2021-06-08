@@ -10,7 +10,7 @@
 <ion-content [fullscreen]="true">
     <ion-list>
         <ion-item *ngFor="let article of articles; let i=index;">
-            <ion-label>
+            <ion-label text-wrap>
                 {{article.snippet}}
             </ion-label>
             <a href={{newsUrlArray[i]}} target="_blank">
