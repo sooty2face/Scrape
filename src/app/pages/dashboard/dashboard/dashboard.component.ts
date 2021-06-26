@@ -29,6 +29,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ];
 
   public day = 0;
+  public storeDay: number;
+
   public region = 'covid';
   public keyword = 'sibiu';
 
@@ -37,6 +39,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public DailyTrendsStore: DailyTrendsDto; /* Today store - not used */
   public DailyTrendsYStore: DailyTrendsDto; /* Yestarday store - highly used */
+
+  public DailyTrendsMore: DailyTrendsDto;
 
   public storeUpdate: boolean;
 
@@ -68,7 +72,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.renderer.setAttribute(document.body, 'color-theme', 'dark');
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQueryCountry = this.dailyTrendsQuery.getCountry$().subscribe(res => {
-      console.log('INITIAL COUNTRY: ' + JSON.stringify(res));
+      // console.log('INITIAL COUNTRY: ' + JSON.stringify(res));
       this.country = res.code;
     });
 
@@ -78,7 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line: deprecation
     this.countryCode$.subscribe(res => {
-      console.log('RES 1: ' + res);
+      // console.log('RES 1: ' + res);
       this.displayCountry = this.countries.find(({ code }) => code === res);
     });
 
@@ -87,7 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getDailyTrendsMoreLoaded().subscribe(res => {
       if (res) {
-        this.updateDailyTrendsStore();
+        this.updateDailyTrendsStore(this.day);
       }
     });
   }
@@ -131,34 +135,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public async loadYesterdayInfo() {
-    // const loader = await this.loadingController.create();
-    // await loader.present();
-
-    await this.updateDailyTrendsStore();
-
-    // tslint:disable-next-line: deprecation
-    // this.dailyTrendsQuery.getDailyTrendsMore().subscribe(
-    //   res => {
-    //     // this.DailyTrendsY = res;
-    //     // this.yesterdayLoaded = true;
-
-    //     if (this.dailyTrendsSubscription) {
-    //       this.dailyTrendsSubscription.unsubscribe();
-    //     }
-
-    //     loader.dismiss();
-    //   },
-    //   error => {
-    //     loader.dismiss();
-    //   },
-    //   async () => {
-    //     loader.dismiss();
-    //   });
+    console.log('loading more...');
+    this.day++;
+    await this.updateDailyTrendsStore(this.day);
   }
 
-  private async updateDailyTrendsStore() {
+  private async updateDailyTrendsStore(day: number) {
     const loader = await this.loadingController.create();
     // await loader.present();
+
+    this.dailyTrendsQuery.getDayLoaded().subscribe(dayLoaded => console.log('day loaded: ' + dayLoaded));
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getLoading().subscribe(res => this.storeUpdate = res);
     this.dailyTrendsSubscriptionYStore = this.dailyTrendsQuery.getDailyTrendsMore()
@@ -174,7 +160,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       switchMap(() => {
         this.dailyTrendsStore.setLoading(true);
         loader.present();
-        return this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day + 1);
+        return this.googleTrendsAPI.getDailyTrends(`${this.country}`, day);
       })
       // tslint:disable-next-line: deprecation
     ).subscribe(
@@ -188,6 +174,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             isLoaded: true
           };
         });
+
+        this.dailyTrendsStore.updateDayLoaded(day);
 
         this.dailyTrendsStore.setLoading(false);
       },

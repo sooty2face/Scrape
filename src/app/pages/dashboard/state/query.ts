@@ -36,7 +36,11 @@ export class DailyTrendsQry extends Query<DailyTrendsState>{
         return this.select(state => state.country);
     }
 
-    /* For the isLoading we did not declare any variable in the interface DailyTrendsState in store.ts, but Akita 
+    getDayLoaded(): Observable<number> {
+        return this.select(state => state.dayLoaded);
+    }
+
+    /* For the isLoading we did not declare any variable in the interface DailyTrendsState in store.ts, but Akita
      * already does this automatically and it offers the method selectLoading() for that */
     getLoading(): Observable<boolean> {
         return this.selectLoading();

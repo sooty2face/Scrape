@@ -18,7 +18,7 @@ export class DailyTrendsService {
 
     const today1 = new Date();
     const today2 = new Date();
-
+    console.log('Day to call is: ' + day);
     // console.log('today1.getDay(): ' + String(today1.getDate() - 0).padStart(2, '0'));
     if (String(today1.getDate() - 0).padStart(2, '0') === '01') {
       today2.setDate(0);
@@ -26,13 +26,13 @@ export class DailyTrendsService {
       this.dayString2 =
         today2.getFullYear() + '-' +
         String(today2.getMonth() + 1).padStart(2, '0') + '-' +
-        String(today2.getDate() - (day === 0 ? 0 : 0)).padStart(2, '0');
+        String(today2.getDate() - (day === 0 ? 0 : day)).padStart(2, '0');
     }
 
     this.dayString1 =
       today1.getFullYear() + '-' +
       String(today1.getMonth() + 1).padStart(2, '0') + '-' +
-      String(today1.getDate() - (day === 0 ? 0 : 1)).padStart(2, '0');
+      String(today1.getDate() - (day === 0 ? 0 : day)).padStart(2, '0');
 
     if (this.dayString2 && day === 1) {
       console.log('(1) day is: ' + this.dayString2);

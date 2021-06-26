@@ -10,6 +10,7 @@ export interface DailyTrendsState {
     loadMoreButtonPressed: boolean;
     isLoaded: boolean;
     country: Country;
+    dayLoaded: number;
 }
 
 /* Set the initial state */
@@ -19,7 +20,8 @@ export const getInitialState = () => {
         DailyTrendsYStore: null,
         loadMoreButtonPressed: false,
         isLoaded: false,
-        country: { code: 'RO', value: 'Romania' }
+        country: { code: 'RO', value: 'Romania' },
+        dayLoaded: 0
     };
 };
 
@@ -32,18 +34,24 @@ export class DailyTrendsStore extends Store<DailyTrendsState>{
     }
 
     public partialRestoreInitialState(): void {
-        // we want to reset almost all fields except dateType because we want to keep last selected tab
         this.update({
             DailyTrendsStore: null,
             DailyTrendsYStore: null,
             loadMoreButtonPressed: false,
-            isLoaded: false
+            isLoaded: false,
+            dayLoaded: 0
         });
     }
 
     public updateCountry(countryInput: Country): void {
         this.update({
             country: countryInput,
+        });
+    }
+
+    public updateDayLoaded(day: number): void {
+        this.update({
+            dayLoaded: day
         });
     }
 }

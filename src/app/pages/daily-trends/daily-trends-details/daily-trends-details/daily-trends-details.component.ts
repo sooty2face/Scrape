@@ -53,18 +53,20 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
       // tslint:disable-next-line: deprecation
       .subscribe(res => {
         this.dailyTrends = res[this.id];
-        loader.dismiss();
-        this.imageUrl = this.dailyTrends.image.imageUrl;
-        this.newsUrl = this.dailyTrends.image.newsUrl;
-        this.source = this.dailyTrends.image.source;
+        // loader.dismiss();
+        // this.imageUrl = this.dailyTrends.image.imageUrl;
+        // this.newsUrl = this.dailyTrends.image.newsUrl;
+        // this.source = this.dailyTrends.image.source;
         this.articles = this.dailyTrends.articles;
 
         this.articles.forEach(element => {
-          this.ImageSubscription = this.imageService.getBase64ImageFromURL$(element.image.imageUrl ? element.image.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png')
-            .subscribe(base64data => {
-              this.base64Image = 'data:image/jpg;base64,' + base64data;
-              this.imageArray.push(this.base64Image);
-            });
+          this.ImageSubscription =
+            this.imageService.getBase64ImageFromURL$(element.image && element.image.imageUrl ?
+              element.image.imageUrl : 'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png')
+              .subscribe(base64data => {
+                this.base64Image = 'data:image/jpg;base64,' + base64data;
+                this.imageArray.push(this.base64Image);
+              });
 
           this.newsUrlArray.push(element.url);
         });
