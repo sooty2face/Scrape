@@ -6,7 +6,7 @@ import { Country, DailyTrendsDto, DailyTrendsItemDto } from '@domain/daily-trend
 
 export interface DailyTrendsState {
     DailyTrendsStore: DailyTrendsDto;
-    DailyTrendsYStore: DailyTrendsDto;
+    DailyTrendsYStore: any;
     loadMoreButtonPressed: boolean;
     isLoaded: boolean;
     country: Country;

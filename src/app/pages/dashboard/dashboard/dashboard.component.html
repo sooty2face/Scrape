@@ -74,83 +74,85 @@ px only for little things like shadows, borders etc.-->
   <ion-router-outlet id="main"></ion-router-outlet>
 
   <!-- <ion-list>   -->
-    <!-- Sliding item with text options on both sides -->
-    <ion-toolbar class="sticky">
-      <ion-title size="large">#Today</ion-title>
-    </ion-toolbar>
-    <ion-card *ngFor="let dailyTrend of DailyTrends; let i=index;">
-      <ion-item-sliding>
-        <ion-item-options side="start">
-          <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>
-          <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option>
-        </ion-item-options>
+  <!-- Sliding item with text options on both sides -->
+  <ion-toolbar class="sticky">
+    <ion-title size="large">#Today</ion-title>
+  </ion-toolbar>
+  <ion-card *ngFor="let dailyTrend of DailyTrends; let i=index;">
+    <ion-item-sliding>
+      <ion-item-options side="start">
+        <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>
+        <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option>
+      </ion-item-options>
 
-        <ion-item>
-          <ion-avatar slot="start">
-            <img *ngIf="dailyTrend.image" [src]="dailyTrend.image.imageUrl">
-          </ion-avatar>
-          <ion-label text-capitalize>
-            {{dailyTrend.title.query}}
-          </ion-label>
-          <ion-text>{{dailyTrend.formattedTraffic}}</ion-text>
-        </ion-item>
+      <ion-item>
+        <ion-avatar slot="start">
+          <img *ngIf="dailyTrend.image" [src]="dailyTrend.image.imageUrl">
+        </ion-avatar>
+        <ion-label text-capitalize>
+          {{dailyTrend.title.query}}
+          <!---- {{dailyTrend.docID}} --- {{dailyTrend.date}} -->
+        </ion-label>
+        <ion-text>{{dailyTrend.formattedTraffic}}K+</ion-text>
+      </ion-item>
 
 
-        <ion-item-options>
-          <ion-item-option color="primary" (click)="renderExtraInfo(i, 0)">
-            <ion-icon slot="end" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
-            More
-          </ion-item-option>
-          <ion-item-option color="secondary">
-            <ion-icon slot="end" name="archive"></ion-icon>
-            Archive
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-card>
+      <ion-item-options>
+        <ion-item-option color="primary" (click)="renderExtraInfo(dailyTrend.docID, 0)">
+          <ion-icon slot="end" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+          More
+        </ion-item-option>
+        <ion-item-option color="secondary">
+          <ion-icon slot="end" name="archive"></ion-icon>
+          Archive
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-card>
   <!-- </ion-list> -->
-  <div>
+  <!-- <div>
     <ion-button class="myButton" *ngIf="!yesterdayLoaded" (click)="loadYesterdayInfo()">Load yesterday</ion-button>
-  </div>
+  </div> -->
   <!-- <ion-list *ngIf="yesterdayLoaded"> -->
-    <!-- Sliding item with text options on both sides -->
-    <ion-toolbar *ngIf="yesterdayLoaded" class="sticky">
-      <ion-title size="large">#Yesterday</ion-title>
-    </ion-toolbar>
-    <ion-card *ngFor="let dailyTrend of DailyTrendsYStore; let i=index;">
-      <ion-item-sliding>
-        <ion-item-options side="start">
-          <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>
-          <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option>
-        </ion-item-options>
+  <!-- Sliding item with text options on both sides -->
+  <ion-toolbar *ngIf="yesterdayLoaded" class="sticky">
+    <ion-title size="large">#Older</ion-title>
+  </ion-toolbar>
+  <ion-card *ngFor="let dailyTrend of DailyTrendsMore; let i=index;">
+    <ion-item-sliding>
+      <ion-item-options side="start">
+        <ion-item-option (click)="favorite(item)">Favorite</ion-item-option>
+        <ion-item-option color="danger" (click)="share(item)">Share</ion-item-option>
+      </ion-item-options>
 
-        <ion-item>
-          <ion-avatar slot="start">
-            <img *ngIf="dailyTrend.image" [src]="dailyTrend.image.imageUrl">
-          </ion-avatar>
-          <ion-label>
-            {{dailyTrend.title.query}}
-          </ion-label>
-          <ion-text>{{dailyTrend.formattedTraffic}}</ion-text>
-        </ion-item>
+      <ion-item>
+        <ion-avatar slot="start">
+          <img *ngIf="dailyTrend.image" [src]="dailyTrend.image.imageUrl">
+        </ion-avatar>
+        <ion-label>
+          {{dailyTrend.title.query}}
+        </ion-label>
+        <ion-text>{{dailyTrend.formattedTraffic}}K+</ion-text>
+      </ion-item>
 
 
-        <ion-item-options>
-          <ion-item-option color="primary" (click)="renderExtraInfo(i, 1)">
-            <ion-icon slot="end" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
-            More
-          </ion-item-option>
-          <ion-item-option color="secondary">
-            <ion-icon slot="end" name="archive"></ion-icon>
-            Archive
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-card>
+      <ion-item-options>
+        <ion-item-option color="primary" (click)="renderExtraInfo(dailyTrend.docID, dailyTrend.date)">
+          <ion-icon slot="end" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+          More
+        </ion-item-option>
+        <ion-item-option color="secondary">
+          <ion-icon slot="end" name="archive"></ion-icon>
+          Archive
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-card>
   <!-- </ion-list> -->
 
-  <ion-infinite-scroll threshold="15%" (ionInfinite)="loadYesterdayInfo()">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescend" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
 
   </ion-infinite-scroll>
   <!-- <div class="figma">

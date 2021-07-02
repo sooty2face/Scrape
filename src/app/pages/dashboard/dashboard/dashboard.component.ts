@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, MenuController, NavController } from '@ionic/angular';
+import { LoadingController, MenuController, NavController, IonContent } from '@ionic/angular';
 import { merge, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/domain/Auth';
@@ -14,6 +14,9 @@ import { DailyTrendsQry, DailyTrendsStore } from '../state';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  @ViewChild(IonContent) content: IonContent;
+
+  public scrollPosition = 0;
 
   public country: string;
   public displayCountry: Country = { code: '', value: '' };
@@ -25,7 +28,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public countries: Country[] = [
     { code: 'RO', value: 'Romania' },
-    { code: 'US', value: 'United States' }
+    { code: 'US', value: 'United States' },
+    { code: 'NL', value: 'Netherlands' }
   ];
 
   public day = 0;
@@ -40,7 +44,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public DailyTrendsStore: DailyTrendsDto; /* Today store - not used */
   public DailyTrendsYStore: DailyTrendsDto; /* Yestarday store - highly used */
 
-  public DailyTrendsMore: DailyTrendsDto;
+  public DailyTrendsMore = [];
 
   public storeUpdate: boolean;
 
@@ -76,6 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.country = res.code;
     });
 
+    // this.dailyTrendsQuery.getDayLoaded().subscribe(dayLoaded => this.day = dayLoaded);
 
     this.countryCode$ = this.dailyTrendsQuery.getCountry$().pipe(map(res => res.code));
     this.countryValue$ = this.dailyTrendsQuery.getCountry$().pipe(map(res => res.value));
@@ -86,7 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.displayCountry = this.countries.find(({ code }) => code === res);
     });
 
-    this.getAll(this.country);
+    this.getAll();
 
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getDailyTrendsMoreLoaded().subscribe(res => {
@@ -96,30 +101,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  public triggerMe(event: Event) {
+  public async triggerMe(event: Event) {
+    // tslint:disable-next-line: no-string-literal
     this.countryIndex = event['detail'];
-    // console.log('Country index: ' + JSON.stringify(this.countryIndex));
+    // tslint:disable-next-line: no-string-literal
     this.country = this.countryIndex['value'].code.valueOf();
-    // console.log('after Country index: ' + this.countryIndex['value'].value.valueOf());
+    // tslint:disable-next-line: no-string-literal
     const countryValue = this.countryIndex['value'].value.valueOf();
-    // console.log('COUNTRY swapped: ' + this.country);
 
     const countrySwapped: Country = { code: this.country, value: countryValue };
-    // console.log('COUNTRY swapped: ' + JSON.stringify(countrySwapped));
+
     this.dailyTrendsStore.partialRestoreInitialState();
     this.dailyTrendsStore.updateCountry(countrySwapped);
+    this.dailyTrendsStore.updateDayLoaded(0);
+    this.day = 0;
+
     this.yesterdayLoaded = false;
-    this.getAll(this.country);
+
+    await this.getAll();
   }
 
-  public async getAll(country: string) {
+  public async getAll(event?: any) {
     const loader = await this.loadingController.create();
     await loader.present();
-    this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends(`${country}`, this.day)
+
+    this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day)
       // tslint:disable-next-line: deprecation
       .subscribe(
         res => {
           this.DailyTrends = res;
+
+          if (event) {
+            event.target.complete();
+          }
           loader.dismiss();
         },
         error => {
@@ -128,23 +142,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
         async () => {
           loader.dismiss();
         });
+
+    // this.DailyTrends.items.forEach(item => item.day = 0);
   }
 
-  public renderExtraInfo(id: number, day: number) {
-    this.navController.navigateRoot(['/daily-trends-details', { id, day, country: this.country }]);
+  public renderExtraInfo(objectID: string, day: any) {
+    this.navController.navigateRoot(['/daily-trends-details', { objectID }]);
   }
 
-  public async loadYesterdayInfo() {
-    console.log('loading more...');
+  public async loadMore(event: any) {
     this.day++;
-    await this.updateDailyTrendsStore(this.day);
+    await this.updateDailyTrendsStore(this.day, event);
+
+    if (this.day === 10) {
+      event.target.disabled = true;
+    }
   }
 
-  private async updateDailyTrendsStore(day: number) {
+  private async updateDailyTrendsStore(day: number, event?: any) {
     const loader = await this.loadingController.create();
-    // await loader.present();
-
-    this.dailyTrendsQuery.getDayLoaded().subscribe(dayLoaded => console.log('day loaded: ' + dayLoaded));
+    // this.dailyTrendsQuery.getDayLoaded().subscribe(dayLoaded => console.log('day loaded: ' + dayLoaded));
     // tslint:disable-next-line: deprecation
     this.dailyTrendsQuery.getLoading().subscribe(res => this.storeUpdate = res);
     this.dailyTrendsSubscriptionYStore = this.dailyTrendsQuery.getDailyTrendsMore()
@@ -152,6 +169,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.yesterdayLoaded = true;
         this.DailyTrendsYStore = res;
+        // this.DailyTrendsMore = this.DailyTrendsMore.concat(res);
       });
 
     this.dailyTrendsQuery.getLoaded().pipe(
@@ -160,24 +178,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
       switchMap(() => {
         this.dailyTrendsStore.setLoading(true);
         loader.present();
-        return this.googleTrendsAPI.getDailyTrends(`${this.country}`, day);
+        return this.googleTrendsAPI.getDailyTrends(`${this.country}`, day).pipe(take(1));
       })
       // tslint:disable-next-line: deprecation
     ).subscribe(
       async res => {
+        this.DailyTrendsMore = this.DailyTrendsMore.concat(res);
+
         await loader.dismiss();
-        this.dailyTrendsStore.update(dailyTrendsState => {
+        this.dailyTrendsStore.update(() => {
           return {
-            DailyTrendsStore: res,
-            DailyTrendsYStore: res,
-            loadMoreButtonPressed: true,
-            isLoaded: true
+            // DailyTrendsStore: res,
+            DailyTrendsYStore: this.DailyTrendsMore,
+            // loadMoreButtonPressed: true,
+            // isLoaded: true
           };
         });
 
         this.dailyTrendsStore.updateDayLoaded(day);
 
-        this.dailyTrendsStore.setLoading(false);
+        // this.dailyTrendsStore.setLoading(false);
+        if (event) {
+          event.target.complete();
+        }
       },
       async () => {
         await loader.dismiss();
@@ -196,6 +219,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
         loadMoreButtonPressed: false,
         isLoaded: false
       };
+    });
+  }
+
+  ionViewWillEnter() {
+    // Restore scroll position
+    this.content.scrollToPoint(50, this.scrollPosition);
+  }
+
+  ionViewDidLeave() {
+    // Save scroll position
+    this.content.getScrollElement().then(data => {
+      console.log(data.scrollTop);
+      this.scrollPosition = 50;
     });
   }
 

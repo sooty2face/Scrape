@@ -15,7 +15,7 @@ import { DailyTrendsService } from 'src/app/domain/daily-trends/services';
 export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
   private dailyTrendsSubscription: Subscription;
   private country: string;
-  private day: number;
+  private day: any;
   public dailyTrends: DailyTrendsItemDto;
   public dailyTrendsByID = [];
   public id: any;
@@ -35,24 +35,25 @@ export class DailyTrendsDetailsComponent implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     private imageService: ImageService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     // tslint:disable-next-line: radix
-    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+    this.id = this.route.snapshot.paramMap.get('objectID');
+
     // tslint:disable-next-line: radix
-    this.day = parseInt(this.route.snapshot.paramMap.get('day'));
+    this.day = this.route.snapshot.paramMap.get('day');
 
     this.country = this.route.snapshot.paramMap.get('country');
 
-    this.getAll();
+    await this.getAll();
   }
 
   public async getAll() {
     const loader = await this.loadingController.create();
     await loader.present();
-    this.dailyTrendsSubscription = this.googleTrendsAPI.getDailyTrends(`${this.country}`, this.day)
+    this.dailyTrendsSubscription = this.googleTrendsAPI.getTrendByID(`${this.id}`)
       // tslint:disable-next-line: deprecation
       .subscribe(res => {
-        this.dailyTrends = res[this.id];
+        this.dailyTrends = res[0];
         // loader.dismiss();
         // this.imageUrl = this.dailyTrends.image.imageUrl;
         // this.newsUrl = this.dailyTrends.image.newsUrl;

@@ -9,36 +9,29 @@ export class DailyTrendsService {
 
   private envUrl = environment.googleTrendsAPI;
 
-  private dayString1: string;
-  private dayString2: string;
+  private dayString: string;
 
   constructor(private httpService: HttpClient) { }
 
-  public getDailyTrends(country: string, day: number): Observable<DailyTrendsDto> {
+  public getTrendByID(objectID: string): Observable<DailyTrendsDto> {
+    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${objectID}/`);
+  }
 
-    const today1 = new Date();
-    const today2 = new Date();
-    console.log('Day to call is: ' + day);
-    // console.log('today1.getDay(): ' + String(today1.getDate() - 0).padStart(2, '0'));
-    if (String(today1.getDate() - 0).padStart(2, '0') === '01') {
-      today2.setDate(0);
+  public getDailyTrends(country: string, day: any): Observable<DailyTrendsDto> {
+    console.log('DAY IN SERVICE NUMBER: ' + day);
+    const today = new Date();
 
-      this.dayString2 =
-        today2.getFullYear() + '-' +
-        String(today2.getMonth() + 1).padStart(2, '0') + '-' +
-        String(today2.getDate() - (day === 0 ? 0 : day)).padStart(2, '0');
-    }
+    const myPastDate = new Date(today);
+    /* Decrement day by the number day received as input */
+    myPastDate.setDate(myPastDate.getDate() - day);
 
-    this.dayString1 =
-      today1.getFullYear() + '-' +
-      String(today1.getMonth() + 1).padStart(2, '0') + '-' +
-      String(today1.getDate() - (day === 0 ? 0 : day)).padStart(2, '0');
+    this.dayString =
+      myPastDate.getFullYear() + '-' +
+      String(myPastDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(myPastDate.getDate() - (day === 0 ? 0 : 0)).padStart(2, '0');
 
-    if (this.dayString2 && day === 1) {
-      console.log('(1) day is: ' + this.dayString2);
-      return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${country}/${this.dayString2}`);
-    }
-    console.log('(2)day is: ' + this.dayString1);
-    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${country}/${this.dayString1}`);
+
+    console.log('Day of the received trends: ' + this.dayString);
+    return this.httpService.get<DailyTrendsDto>(`${this.envUrl}/googleTrends/${country}/${this.dayString}`);
   }
 }

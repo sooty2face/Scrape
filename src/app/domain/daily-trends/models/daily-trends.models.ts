@@ -3,12 +3,16 @@ export interface DailyTrendsDto {
 }
 
 export interface DailyTrendsItemDto {
+    _id: string;
     title: TitleDto | null;
+    country: string;
+    date: string;
     formattedTraffic: string | null;
     relatedQueries: RelatedQueryDto[];
     image: ImageDto | null;
     articles: ArticleDto[] | null;
     shareUrl: string | null;
+    day: number;
 }
 
 export interface ArticleDto {
