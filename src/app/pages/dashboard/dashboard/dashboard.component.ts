@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     await this.getAll();
   }
 
-  public async getAll(event?: any) {
+  public async getAll(event?: any): Promise<any> {
     const loader = await this.loadingController.create();
     await loader.present();
 
@@ -208,6 +208,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       async () => {
         await loader.dismiss();
       });
+  }
+
+  public async doRefresh(event) {
+    console.log('Begin async operation');
+
+    this.dailyTrendsStore.partialRestoreInitialState();
+    this.dailyTrendsStore.updateDayLoaded(0);
+    this.day = 0;
+
+    this.yesterdayLoaded = false;
+
+    await this.getAll().then(event.target.complete());
   }
 
   async logout() {
