@@ -114,6 +114,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dailyTrendsStore.partialRestoreInitialState();
     this.dailyTrendsStore.updateCountry(countrySwapped);
     this.dailyTrendsStore.updateDayLoaded(0);
+
+    this.DailyTrendsMore = [];
+
     this.day = 0;
 
     this.yesterdayLoaded = false;
